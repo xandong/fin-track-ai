@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port ${NEXT_DEV_PORT-3000}",
+    "dev": "next dev --port ${NEXT_DEV_PORT}",
     "build": "next build",
     "test": "jest --passWithNoTests --maxWorkers=50%",
     "test:watch": "jest --watch --passWithNoTests --maxWorkers=25%",
@@ -16,6 +16,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.2.1",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@typescript-eslint/eslint-plugin": "^8.8.1",

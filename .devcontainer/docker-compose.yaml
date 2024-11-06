@@ -16,10 +16,10 @@ services:
     volumes:
       - ..:/workspace/app:cached
       - /workspace/app/node_modules
-    command: npm run dev
+    command: sleep infinity
     ports:
-      - "${NEXT_DEV_PORT}:${NEXT_DEV_PORT}"
-      - "${NEXT_PROD_PORT}:${NEXT_PROD_PORT}"
+      - "${NEXT_DEV_PORT:-3000}:${NEXT_DEV_PORT:-3000}"
+      - "${NEXT_PROD_PORT:-3001}:${NEXT_PROD_PORT:-3001}"
     networks:
       - next-fin_track_ai-network
 

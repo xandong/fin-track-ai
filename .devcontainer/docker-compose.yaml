@@ -1,9 +1,9 @@
 networks:
-  next-template-network:
-    name: next-template-network
+  next-fin_track_ai-network:
+    name: next-fin_track_ai-network
 
 services:
-  next-app:
+  next-app-fin_track_ai:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -15,6 +15,6 @@ services:
       - /workspace/app/node_modules
     command: npm run dev
     ports:
-      - "3000:3000"
+      - "${NEXT_PORT}:${NEXT_PORT}"
     networks:
-      - next-template-network
+      - next-fin_track_ai-network

@@ -12,5 +12,4 @@ RUN cd .. && cd app && npm install
 
 COPY ../ .
 
-
 # CMD ["npm", "run", "dev"]

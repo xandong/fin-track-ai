@@ -2,6 +2,9 @@ networks:
   next-fin_track_ai-network:
     name: next-fin_track_ai-network
 
+volumes:
+  db-pg-fin_track_ai-data: null
+
 services:
   next-app-fin_track_ai:
     build:
@@ -15,6 +18,33 @@ services:
       - /workspace/app/node_modules
     command: npm run dev
     ports:
-      - "${NEXT_PORT}:${NEXT_PORT}"
+      - "${NEXT_DEV_PORT}:${NEXT_DEV_PORT}"
+      - "${NEXT_PROD_PORT}:${NEXT_PROD_PORT}"
+    networks:
+      - next-fin_track_ai-network
+
+  db:
+    image: postgres:14.2
+    restart: unless-stopped
+    volumes:
+      - db-pg-fin_track_ai-data:/var/lib/postgresql/data
+    networks:
+      - next-fin_track_ai-network
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    healthcheck:
+      test: pg_isready -U "${DATABASE_USER}" -d "${DATABASE_NAME}"
+      interval: 5s
+      timeout: 30s
+      retries: 3
+
+  adminer:
+    image: adminer
+    ports:
+      - "${ADMINER_FORWARD_PORT:-8088}:8080"
     networks:
       - next-fin_track_ai-network

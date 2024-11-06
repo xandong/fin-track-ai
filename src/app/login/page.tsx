@@ -1,9 +1,17 @@
-"use client"
-
 import { Button } from "@/components/_ui/button"
+import { SignInButton } from "@clerk/nextjs"
+import { auth } from "@clerk/nextjs/server"
+import { LogInIcon } from "lucide-react"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
-const LoginPage = () => {
+const LoginPage = async () => {
+  const { userId } = await auth()
+
+  if (userId) {
+    redirect("/")
+  }
+
   return (
     <div className="grid h-screen w-screen grid-cols-1 lg:grid-cols-2">
       <div className="flex items-center justify-center py-[4rem]">
@@ -26,9 +34,12 @@ const LoginPage = () => {
           </div>
 
           <div className="w-full">
-            <Button variant="outline" className="w-full">
-              Continue with Google
-            </Button>
+            <SignInButton>
+              <Button variant="outline" className="w-full">
+                <LogInIcon className="mr-2" />
+                Continue with Google
+              </Button>
+            </SignInButton>
           </div>
         </div>
       </div>

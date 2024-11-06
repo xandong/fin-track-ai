@@ -9,6 +9,7 @@ import {
   SignInButton,
   UserButton
 } from "@clerk/nextjs"
+import { dark } from "@clerk/themes"
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -27,15 +28,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark
+      }}
+    >
       <html lang="en">
         <body className={`${mulish.className} dark antialiased`}>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
           {children}
         </body>
       </html>

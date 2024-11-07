@@ -40,7 +40,7 @@ You can edit the main page by modifying app/page.tsx. The page auto-updates as y
 Husky is configured to run pre-commit hooks for linting and testing. Make sure to install Husky’s hooks by running:
 
 ```
-npx husky install
+npx husky init
 ```
 
 ### Linting

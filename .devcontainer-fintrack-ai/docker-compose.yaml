@@ -1,0 +1,49 @@
+networks:
+  fintrack_ai-network:
+    name: fintrack_ai-network
+
+volumes:
+  db-pg-fintrack_ai-data: null
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer-fintrack-ai/Dockerfile
+    env_file:
+      - .env
+      - .env.local
+    volumes:
+      - ..:/workspace/app:cached
+    command: sleep infinity
+    ports:
+      - "${NEXT_DEV_PORT:-3000}:${NEXT_DEV_PORT:-3000}"
+      - "${NEXT_PROD_PORT:-3001}:${NEXT_PROD_PORT:-3001}"
+    networks:
+      - fintrack_ai-network
+
+  db:
+    image: postgres:14.2
+    restart: unless-stopped
+    volumes:
+      - db-pg-fintrack_ai-data:/var/lib/postgresql/data
+    networks:
+      - fintrack_ai-network
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    healthcheck:
+      test: pg_isready -U "${DATABASE_USER}" -d "${DATABASE_NAME}"
+      interval: 5s
+      timeout: 30s
+      retries: 3
+
+  adminer:
+    image: adminer
+    ports:
+      - "${ADMINER_FORWARD_PORT:-8088}:8080"
+    networks:
+      - fintrack_ai-network

@@ -1,0 +1,22 @@
+model TransactionCategory {
+  id     Int          @id @default(autoincrement())
+  name   String      
+  userId String?
+  type   CategoryType
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  Transaction Transaction[]
+
+  @@unique([userId, name])
+  @@map("categories")
+  @@schema("transactional")
+}
+
+enum CategoryType {
+  PUBLIC
+  PRIVATE
+
+  @@schema("transactional")
+}

@@ -1,7 +1,13 @@
+import { UserButton } from "@clerk/nextjs"
+
 const Main = () => {
   return (
-    <main className="h-[100vh] bg-[#0A0A0A] flex justify-center items-center">
-      <h1 className="text-white text-5xl font-bold">Main Component</h1>
+    <main className="flex h-[100vh] items-center justify-center bg-[#0A0A0A]">
+      <h1 className="text-5xl font-bold text-white">Main Component</h1>
+
+      <div className="text-white">
+        <UserButton showName />
+      </div>
     </main>
   )
 }

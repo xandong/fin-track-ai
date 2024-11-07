@@ -1,7 +1,4 @@
-import {
-  TransactionPaymentMethod,
-  TransactionType,
-} from "@prisma/client";
+import { TransactionPaymentMethod, TransactionType } from "@prisma/client"
 
 export const TRANSACTION_CATEGORY_LABELS = {
   EDUCATION: "Educação",
@@ -12,8 +9,8 @@ export const TRANSACTION_CATEGORY_LABELS = {
   OTHER: "Outros",
   SALARY: "Salário",
   TRANSPORTATION: "Transporte",
-  UTILITY: "Utilidades",
-};
+  UTILITY: "Utilidades"
+}
 
 export const TRANSACTION_PAYMENT_METHOD_LABELS = {
   BANK_TRANSFER: "Transferência Bancária",
@@ -22,55 +19,55 @@ export const TRANSACTION_PAYMENT_METHOD_LABELS = {
   CREDIT_CARD: "Cartão de Crédito",
   DEBIT_CARD: "Cartão de Débito",
   OTHER: "Outros",
-  PIX: "Pix",
-};
+  PIX: "Pix"
+}
 
 export const TRANSACTION_TYPE_OPTIONS = [
   {
     value: TransactionType.EXPENSE,
-    label: "Despesa",
+    label: "Despesa"
   },
   {
     value: TransactionType.DEPOSIT,
-    label: "Depósito",
+    label: "Depósito"
   },
   {
     value: TransactionType.INVESTMENT,
-    label: "Investimento",
-  },
-];
+    label: "Investimento"
+  }
+]
 
 export const TRANSACTION_PAYMENT_METHOD_OPTIONS = [
   {
-    value: TransactionPaymentMethod.BANK_TRANSFER,
-    label:
-      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.BANK_TRANSFER],
-  },
-  {
     value: TransactionPaymentMethod.BANK_SLIP,
-    label:
-      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.BANK_SLIP],
+    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.BANK_SLIP]
   },
-  {
-    value: TransactionPaymentMethod.CASH,
-    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.CASH],
-  },
+
   {
     value: TransactionPaymentMethod.CREDIT_CARD,
     label:
-      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.CREDIT_CARD],
+      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.CREDIT_CARD]
   },
   {
     value: TransactionPaymentMethod.DEBIT_CARD,
     label:
-      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.DEBIT_CARD],
+      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.DEBIT_CARD]
   },
   {
-    value: TransactionPaymentMethod.OTHER,
-    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.OTHER],
+    value: TransactionPaymentMethod.CASH,
+    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.CASH]
   },
   {
     value: TransactionPaymentMethod.PIX,
-    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.PIX],
+    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.PIX]
   },
-];
+  {
+    value: TransactionPaymentMethod.BANK_TRANSFER,
+    label:
+      TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.BANK_TRANSFER]
+  },
+  {
+    value: TransactionPaymentMethod.OTHER,
+    label: TRANSACTION_PAYMENT_METHOD_LABELS[TransactionPaymentMethod.OTHER]
+  }
+]

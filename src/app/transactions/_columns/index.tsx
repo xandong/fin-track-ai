@@ -2,33 +2,38 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Transaction } from "@prisma/client"
-
-import { TransactionTypeBadge } from "./typeBadge"
-import { TransactionCategory } from "./categoryDisplay"
-import { TRANSACTION_PAYMENT_METHOD_LABELS } from "@/constants/transactions"
-import { Button } from "@/components/_ui/button"
 import { PencilIcon, TrashIcon } from "lucide-react"
 
-export const columns: ColumnDef<({
-  category: {
-      name: string;
-  } | null;
-} & Transaction)>[] = [
+import { TRANSACTION_PAYMENT_METHOD_LABELS } from "@/constants/transactions"
+
+import { Button } from "@/components/_ui/button"
+import { TransactionTypeBadge } from "./typeBadge"
+import { TransactionCategoryDisplay } from "@/components/TransactionCategoryDisplay"
+
+export const columns: ColumnDef<
+  {
+    category: {
+      name: string
+    } | null
+  } & Transaction
+>[] = [
   {
     accessorKey: "name",
-    header: "Nome",
+    header: "Nome"
   },
   {
     accessorKey: "type",
     header: "Tipo",
-    cell: ({ row: { original: transaction } }) =>
+    cell: ({ row: { original: transaction } }) => (
       <TransactionTypeBadge transaction={transaction} />
+    )
   },
   {
     accessorKey: "categoryId",
     header: "Categoria",
-    cell: ({ row: { original: transaction } }) =>
-      <TransactionCategory transaction={transaction} />
+    cell: ({ row: { original: transaction } }) => (
+      <TransactionCategoryDisplay category={transaction.category} />
+    )
   },
   {
     accessorKey: "paymentMethod",
@@ -39,7 +44,7 @@ export const columns: ColumnDef<({
   {
     accessorKey: "date",
     header: "Data",
-    cell: ({ row: { original: transaction}}) => 
+    cell: ({ row: { original: transaction } }) => (
       <span className="text-zinc-500">
         {new Date(transaction.date).toLocaleDateString("pt-BR", {
           day: "2-digit",
@@ -47,11 +52,12 @@ export const columns: ColumnDef<({
           year: "numeric"
         })}
       </span>
+    )
   },
   {
     accessorKey: "amount",
     header: "Valor",
-    cell: ({ row: { original: transaction}}) => 
+    cell: ({ row: { original: transaction } }) =>
       new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL"
@@ -63,11 +69,11 @@ export const columns: ColumnDef<({
     cell: () => (
       <div className="flex justify-end gap-1">
         <Button variant="ghost" size="icon">
-          <PencilIcon className="text-zinc-500"/>
+          <PencilIcon className="text-zinc-500" />
         </Button>
 
         <Button variant="ghost" size="icon">
-          <TrashIcon className="text-zinc-500"/>
+          <TrashIcon className="text-zinc-500" />
         </Button>
       </div>
     )

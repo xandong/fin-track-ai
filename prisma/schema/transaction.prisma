@@ -1,0 +1,37 @@
+model Transaction {
+  id            String                   @id @default(uuid())
+  name          String
+  amount        Decimal                  @db.Money
+  date          DateTime
+  categoryId    Int?
+  type          TransactionType
+  paymentMethod TransactionPaymentMethod
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  category TransactionCategory? @relation(fields: [categoryId], references: [id])
+
+  @@map("transactions")
+  @@schema("transactional")
+}
+
+enum TransactionType {
+  DEPOSIT
+  EXPENSE
+  INVESTMENT
+
+  @@schema("transactional")
+}
+
+enum TransactionPaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  BANK_SLIP
+  CASH
+  PIX
+  OTHER
+
+  @@schema("transactional")
+}

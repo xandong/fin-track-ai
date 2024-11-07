@@ -1,7 +1,5 @@
 import { UserButton } from "@clerk/nextjs"
 
-const foo = "bla"
-
 const Main = () => {
   return (
     <main className="flex h-[100vh] items-center justify-center bg-[#0A0A0A]">

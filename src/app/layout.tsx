@@ -4,10 +4,6 @@ import { Mulish } from "next/font/google"
 import "@/styles/global.css"
 import {
   ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton
 } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 

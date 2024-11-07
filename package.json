@@ -11,9 +11,10 @@
     "generate": "npx plop --plopfile generators/plopfile.js",
     "start": "next start --port ${NEXT_PROD_PORT-3000}",
     "lint": "next lint",
-    "prepare": "husky install",
+    "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.2.1",

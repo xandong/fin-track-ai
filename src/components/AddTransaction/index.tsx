@@ -1,9 +1,10 @@
 "use client"
 
-import { useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ArrowDownUpIcon, CalendarIcon } from "lucide-react"
 import {
   $Enums,
+  TransactionCategory,
   TransactionPaymentMethod,
   TransactionType
 } from "@prisma/client"
@@ -44,20 +45,29 @@ import {
 import {
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS
-} from "@/constants/transactions"
+} from "@/utils/constants/transactions"
 import { Popover, PopoverContent, PopoverTrigger } from "../_ui/popover"
 import { cn } from "@/lib/utils"
 import { Calendar } from "../_ui/calendar"
 import { TransactionCategoryDisplay } from "../TransactionCategoryDisplay"
 
+import { addTransaction } from "@/actions/addTransaction"
+import { AddTransactionCategory } from "../AddTransactionCategory"
+
 const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    message: "o nome é obrigatório"
-  }),
-  amount: z.string().trim().min(1, {
-    message: "O valor é obrigatório"
-  }),
-  category: z.string().trim(),
+  name: z
+    .string({
+      required_error: "O nome é obrigatório"
+    })
+    .trim()
+    .min(1, "O nome é obrigatório"),
+  amount: z
+    .number({
+      required_error: "O valor é obrigatório"
+    })
+    .positive({
+      message: "O valor deve ser positivo"
+    }),
   type: z.nativeEnum(TransactionType, {
     required_error: "O tipo é obrigatório"
   }),
@@ -70,44 +80,81 @@ const formSchema = z.object({
 })
 
 interface AddTransactionProps {
-  categories: {
-    id: number
-    name: string
-    userId: string | null
-    type: $Enums.CategoryType
-    createdAt: Date
-    updateAt: Date
-  }[]
+  categories: TransactionCategory[]
 }
 
 export const AddTransaction = ({ categories }: AddTransactionProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const otherCategory = categories.find((category) => category.name == "OTHER")
+  const [categoryId, setCategoryId] = useState<string>(
+    otherCategory ? otherCategory.id.toString() : ""
+  )
+  const [newCategoryId, setNewCategoryId] = useState("")
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // name: "",
-      // amount: 0,
-      // category: "OTHER",
+      name: "",
       date: new Date()
-      // paymentMethod: TransactionPaymentMethod.CASH,
-      // type: TransactionType.EXPENSE
     }
   })
 
   const type = form.watch("type")
 
   const onSubmit = useCallback(
-    (data: z.infer<typeof formSchema>) => {
-      console.log({ data })
-      form.handleSubmit(() => {})
+    async (data: z.infer<typeof formSchema>) => {
+      try {
+        await addTransaction({
+          ...data,
+          categoryId:
+            data.type === "EXPENSE" && categoryId
+              ? Number(categoryId)
+              : undefined
+        })
+        setIsOpen(false)
+        form.reset()
+      } catch (error) {
+        console.error("ERROR", { error })
+      }
     },
-    [form]
+    [categoryId, form]
   )
+
+  const handleAddNewCategory = useCallback(
+    (newCategory: {
+      name: string
+      id: number
+      userId: string | null
+      type: $Enums.CategoryType
+      createdAt: Date
+      updateAt: Date
+    }) => {
+      if (!newCategory) return
+      if (newCategory.id.toString() === categoryId) return
+
+      categories.push(newCategory)
+      setNewCategoryId(newCategory.id.toString())
+    },
+    [categories, categoryId]
+  )
+
+  useEffect(() => {
+    if (!newCategoryId || newCategoryId === categoryId) return
+
+    setCategoryId(newCategoryId)
+  }, [categoryId, newCategoryId])
 
   return (
     <Dialog
+      open={isOpen}
       onOpenChange={(open) => {
+        setIsOpen(open)
         if (!open) {
-          form.reset()
+          form.reset({
+            name: "",
+            date: new Date()
+          })
+          setCategoryId(otherCategory ? otherCategory.id.toString() : "")
         }
       }}
     >
@@ -151,7 +198,15 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
                 <FormItem>
                   <FormLabel>Valor</FormLabel>
                   <FormControl>
-                    <MoneyInput placeholder="Digite o valor..." {...field} />
+                    <MoneyInput
+                      placeholder="Digite o valor..."
+                      value={field.value}
+                      onValueChange={({ floatValue }) =>
+                        field.onChange(floatValue)
+                      }
+                      onBlur={field.onBlur}
+                      disabled={field.disabled}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -165,10 +220,7 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
                 <FormItem>
                   <FormLabel>Tipo da transação</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o tipo da transação" />
                       </SelectTrigger>
@@ -185,6 +237,59 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
                 </FormItem>
               )}
             />
+
+            {type === "EXPENSE" && (
+              <FormItem>
+                <FormLabel>Valor gasto em</FormLabel>
+                <FormControl>
+                  <Select
+                    value={categoryId}
+                    onValueChange={(e) => {
+                      if (e === categoryId) return
+                      setCategoryId(e)
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione uma categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {otherCategory && (
+                        <SelectItem
+                          key={otherCategory.id}
+                          value={otherCategory.id.toString()}
+                        >
+                          <TransactionCategoryDisplay
+                            category={otherCategory}
+                          />
+                        </SelectItem>
+                      )}
+
+                      {categories.map((option) => {
+                        if (option.name === "OTHER") return null
+
+                        return (
+                          <SelectItem
+                            key={option.id}
+                            value={option.id.toString()}
+                          >
+                            <TransactionCategoryDisplay category={option} />
+                          </SelectItem>
+                        )
+                      })}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+
+            {type === "EXPENSE" &&
+              otherCategory?.id.toString() === categoryId && (
+                <AddTransactionCategory
+                  categories={categories}
+                  handleNewCategory={handleAddNewCategory}
+                />
+              )}
 
             <FormField
               control={form.control}
@@ -213,36 +318,6 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
                 </FormItem>
               )}
             />
-
-            {type === "EXPENSE" && (
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Valor gasto em</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione uma categoria" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((option) => (
-                            <SelectItem key={option.id} value={option.name}>
-                              <TransactionCategoryDisplay category={option} />
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
 
             <FormField
               control={form.control}

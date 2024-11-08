@@ -20,11 +20,10 @@ export const getColumns = ({
   categories
 }: MyColumnProps): ColumnDef<
   {
-    amount: number
     category: {
       name: string
     } | null
-  } & Omit<Transaction, "amount">
+  } & Transaction
 >[] => {
   return [
     {

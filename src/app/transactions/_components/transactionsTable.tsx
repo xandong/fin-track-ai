@@ -6,8 +6,7 @@ import { Transaction, TransactionCategory } from "@prisma/client"
 import { getColumns } from "../_columns"
 
 type TransactionsTableProps = {
-  transactions: (Omit<Transaction, "amount"> & {
-    amount: number
+  transactions: (Transaction & {
     category: { name: string } | null
   })[]
   categories: TransactionCategory[]

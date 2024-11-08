@@ -35,11 +35,6 @@ const Transactions = async () => {
     }
   })
 
-  const formattedTransactions = transactions.map((transaction) => ({
-    ...transaction,
-    amount: Number(transaction.amount)
-  }))
-
   return (
     <div className="flex h-full w-full flex-col items-center">
       <div className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
@@ -53,7 +48,7 @@ const Transactions = async () => {
 
         <TransactionsTable
           categories={categories}
-          transactions={formattedTransactions}
+          transactions={JSON.parse(JSON.stringify(transactions))}
           itemsPerPage={8}
         />
       </div>

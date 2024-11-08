@@ -142,6 +142,7 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
     if (!newCategoryId || newCategoryId === categoryId) return
 
     setCategoryId(newCategoryId)
+    setNewCategoryId("")
   }, [categoryId, newCategoryId])
 
   return (

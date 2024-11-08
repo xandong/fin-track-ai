@@ -48,7 +48,7 @@ const Transactions = async () => {
           </div>
         </div>
 
-        <DataTable columns={columns} data={transactions} />
+        <DataTable columns={columns} data={transactions} itemsPerPage={8} />
       </div>
     </div>
   )

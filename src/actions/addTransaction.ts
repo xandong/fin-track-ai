@@ -24,7 +24,6 @@ type addTransactionParams = Omit<Prisma.TransactionCreateInput, "userId"> & {
 }
 
 export const addTransaction = async (params: addTransactionParams) => {
-  console.log({ params })
   try {
     const { userId } = await auth()
     if (!userId) throw new Error("Unauthenticated")

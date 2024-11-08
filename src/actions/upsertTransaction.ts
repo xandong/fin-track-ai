@@ -10,7 +10,7 @@ import {
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
-const addTransactionSchema = z.object({
+const upsertTransactionSchema = z.object({
   name: z.string().trim().min(1),
   amount: z.number().positive(),
   categoryId: z.number().optional(),
@@ -19,15 +19,16 @@ const addTransactionSchema = z.object({
   date: z.date()
 })
 
-type addTransactionParams = Omit<Prisma.TransactionCreateInput, "userId"> & {
+type upsertTransactionParams = Omit<Prisma.TransactionCreateInput, "userId"> & {
   categoryId?: number | undefined | null
+  id?: string
 }
 
-export const addTransaction = async (params: addTransactionParams) => {
+export const upsertTransaction = async (params: upsertTransactionParams) => {
   try {
     const { userId } = await auth()
     if (!userId) throw new Error("Unauthenticated")
-    addTransactionSchema.parse(params)
+    upsertTransactionSchema.parse(params)
 
     const data: Prisma.TransactionUncheckedCreateInput = {
       userId,
@@ -39,10 +40,16 @@ export const addTransaction = async (params: addTransactionParams) => {
       categoryId: params.categoryId ?? null
     }
 
-    await prisma.transaction.create({ data })
+    await prisma.transaction.upsert({
+      where: {
+        id: params.id || "id"
+      },
+      update: { ...data, userId },
+      create: { ...data, userId }
+    })
     revalidatePath("/transactions")
   } catch (error) {
-    console.error("[addTransaction]:", { error })
+    console.error("[upsertTransaction]:", { error })
     throw new Error("Error when create new transaction")
   }
 }

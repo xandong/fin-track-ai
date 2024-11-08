@@ -1,10 +1,9 @@
 import { CategoryType } from "@prisma/client"
-
-import { AddTransaction } from "@/components/AddTransaction"
-import { DataTable } from "@/components/_ui/dataTable"
-import { columns } from "./_columns"
 import { auth } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/prisma"
+
+import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
+import { TransactionsTable } from "./_components/transactionsTable"
 
 const Transactions = async () => {
   const { userId } = await auth()
@@ -29,13 +28,17 @@ const Transactions = async () => {
           type: CategoryType.PUBLIC
         },
         {
-          userId: userId ?? undefined
+          userId: userId ?? undefined,
+          type: CategoryType.PRIVATE
         }
       ]
     }
   })
 
-  console.log({ transactions, categories })
+  const formattedTransactions = transactions.map((transaction) => ({
+    ...transaction,
+    amount: Number(transaction.amount)
+  }))
 
   return (
     <div className="flex h-full w-full flex-col items-center">
@@ -44,11 +47,15 @@ const Transactions = async () => {
           <h1 className="text-2xl font-bold leading-8">Transactions</h1>
 
           <div>
-            <AddTransaction categories={categories} />
+            <UpsertTransactionDialog categories={categories} transactionId="" />
           </div>
         </div>
 
-        <DataTable columns={columns} data={transactions} itemsPerPage={8} />
+        <TransactionsTable
+          categories={categories}
+          transactions={formattedTransactions}
+          itemsPerPage={8}
+        />
       </div>
     </div>
   )

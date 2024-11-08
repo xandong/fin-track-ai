@@ -1,4 +1,6 @@
 "use client"
+import React, { useEffect } from "react"
+import { LoaderCircleIcon } from "lucide-react"
 
 import {
   ColumnDef,
@@ -21,7 +23,6 @@ import {
   TableHeader,
   TableRow
 } from "@/components/_ui/table"
-import React, { useEffect } from "react"
 import { Button } from "./button"
 
 interface DataTableProps<TData, TValue> {
@@ -35,6 +36,7 @@ export function DataTable<TData, TValue>({
   data,
   itemsPerPage = 10
 }: DataTableProps<TData, TValue>) {
+  const [initialized, setInitialized] = React.useState(false)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -64,7 +66,15 @@ export function DataTable<TData, TValue>({
 
   useEffect(() => {
     table.setPageSize(itemsPerPage)
+    setInitialized(true)
   }, [table, itemsPerPage])
+
+  if (!initialized)
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <LoaderCircleIcon className="animate-spin text-primary" size={32} />
+      </div>
+    )
 
   return (
     <div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { ArrowDownUpIcon, CalendarIcon } from "lucide-react"
 import {
   $Enums,
@@ -50,8 +50,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../_ui/popover"
 import { cn } from "@/lib/utils"
 import { Calendar } from "../_ui/calendar"
 import { TransactionCategoryDisplay } from "../TransactionCategoryDisplay"
-
-import { addTransaction } from "@/actions/addTransaction"
+import { upsertTransaction } from "@/actions/upsertTransaction"
 import { AddTransactionCategory } from "../AddTransactionCategory"
 
 const formSchema = z.object({
@@ -79,21 +78,30 @@ const formSchema = z.object({
   })
 })
 
-interface AddTransactionProps {
+interface UpsertTransactionDialogProps {
+  transactionId: string
   categories: TransactionCategory[]
+  defaultValues?: z.infer<typeof formSchema>
+  CreateButton?: React.ReactNode
+  UpdateButton?: React.ReactNode
 }
 
-export const AddTransaction = ({ categories }: AddTransactionProps) => {
+export const UpsertTransactionDialog = ({
+  categories,
+  defaultValues,
+  CreateButton,
+  UpdateButton,
+  transactionId
+}: UpsertTransactionDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const otherCategory = categories.find((category) => category.name == "OTHER")
   const [categoryId, setCategoryId] = useState<string>(
     otherCategory ? otherCategory.id.toString() : ""
   )
   const [newCategoryId, setNewCategoryId] = useState("")
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       name: "",
       date: new Date()
     }
@@ -104,20 +112,26 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
   const onSubmit = useCallback(
     async (data: z.infer<typeof formSchema>) => {
       try {
-        await addTransaction({
+        await upsertTransaction({
           ...data,
+          id: transactionId,
           categoryId:
             data.type === "EXPENSE" && categoryId
               ? Number(categoryId)
               : undefined
         })
         setIsOpen(false)
-        form.reset()
+        form.reset(
+          defaultValues ?? {
+            name: "",
+            date: new Date()
+          }
+        )
       } catch (error) {
         console.error("ERROR", { error })
       }
     },
-    [categoryId, form]
+    [categoryId, defaultValues, form, transactionId]
   )
 
   const handleAddNewCategory = useCallback(
@@ -151,25 +165,44 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
       onOpenChange={(open) => {
         setIsOpen(open)
         if (!open) {
-          form.reset({
-            name: "",
-            date: new Date()
-          })
+          form.reset(
+            defaultValues ?? {
+              name: "",
+              date: new Date()
+            }
+          )
           setCategoryId(otherCategory ? otherCategory.id.toString() : "")
         }
       }}
     >
       <DialogTrigger asChild>
-        <Button className="rounded-full">
-          Adicionar Transação
-          <ArrowDownUpIcon />
-        </Button>
+        {defaultValues ? (
+          UpdateButton ? (
+            UpdateButton
+          ) : (
+            <Button className="rounded-full">
+              Editar Transação
+              <ArrowDownUpIcon />
+            </Button>
+          )
+        ) : CreateButton ? (
+          CreateButton
+        ) : (
+          <Button className="rounded-full">
+            Adicionar Transação
+            <ArrowDownUpIcon />
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="max-w-[95%] rounded-2xl sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Adicionar transação</DialogTitle>
-          <DialogDescription>Insira as informações abaixo</DialogDescription>
+          <DialogTitle>
+            {defaultValues ? "Editar" : "Adicionar"} transação
+          </DialogTitle>
+          <DialogDescription>
+            {defaultValues ? "Altere" : "Insira"} as informações abaixo
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -368,7 +401,9 @@ export const AddTransaction = ({ categories }: AddTransactionProps) => {
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Adicionar</Button>
+              <Button type="submit">
+                {defaultValues ? "Salvar" : "Adicionar"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

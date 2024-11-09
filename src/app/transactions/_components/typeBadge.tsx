@@ -16,8 +16,8 @@ export const TransactionTypeBadge = ({
   switch (transaction.type) {
     case "DEPOSIT":
       return (
-        <Badge className="bg-muted font-bold text-primary hover:bg-muted">
-          <CircleIcon className="mr-1 fill-primary" size={8} />
+        <Badge className="bg-tertiary/10 text-tertiary hover:bg-tertiary/15 font-bold">
+          <CircleIcon className="fill-tertiary mr-1" size={8} />
           Depósito
         </Badge>
       )
@@ -30,8 +30,8 @@ export const TransactionTypeBadge = ({
       )
     case "INVESTMENT":
       return (
-        <Badge className="bg-muted font-bold text-zinc-50 hover:bg-muted">
-          <CircleIcon className="mr-2 fill-zinc-50" size={8} />
+        <Badge className="bg-secondary/10 font-bold text-secondary hover:bg-secondary/15">
+          <CircleIcon className="mr-2 fill-secondary" size={8} />
           Investimento
         </Badge>
       )

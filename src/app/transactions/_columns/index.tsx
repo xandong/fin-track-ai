@@ -164,6 +164,7 @@ export const getColumns = ({
             transactionId={transaction.id}
             defaultValues={{
               ...transaction,
+              categoryId: transaction.categoryId?.toString() || undefined,
               amount: Number(transaction.amount)
             }}
             UpdateButton={

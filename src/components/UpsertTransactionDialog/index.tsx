@@ -78,10 +78,14 @@ const formSchema = z.object({
   })
 })
 
+interface DefaultValues extends z.infer<typeof formSchema> {
+  categoryId?: string
+}
+
 interface UpsertTransactionDialogProps {
-  transactionId: string
+  transactionId?: string
   categories: TransactionCategory[]
-  defaultValues?: z.infer<typeof formSchema>
+  defaultValues?: DefaultValues
   CreateButton?: React.ReactNode
   UpdateButton?: React.ReactNode
 }
@@ -96,21 +100,39 @@ export const UpsertTransactionDialog = ({
   const [isOpen, setIsOpen] = useState(false)
   const otherCategory = categories.find((category) => category.name == "OTHER")
   const [categoryId, setCategoryId] = useState<string>(
-    otherCategory ? otherCategory.id.toString() : ""
+    defaultValues?.categoryId
+      ? defaultValues?.categoryId
+      : otherCategory
+        ? otherCategory.id.toString()
+        : ""
   )
   const [newCategoryId, setNewCategoryId] = useState("")
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues ?? {
-      name: "",
-      date: new Date()
-    }
+    defaultValues: defaultValues
+      ? { ...defaultValues, date: new Date(defaultValues?.date) }
+      : {
+          name: "",
+          date: new Date()
+        }
   })
 
   const type = form.watch("type")
 
   const onSubmit = useCallback(
     async (data: z.infer<typeof formSchema>) => {
+      if (
+        defaultValues &&
+        defaultValues.amount === data.amount &&
+        new Date(defaultValues.date).getTime() ===
+          new Date(data.date).getTime() &&
+        defaultValues.name === data.name &&
+        defaultValues.paymentMethod === data.paymentMethod &&
+        defaultValues.type === data.type &&
+        defaultValues.categoryId === categoryId
+      )
+        return
+
       try {
         await upsertTransaction({
           ...data,
@@ -121,11 +143,14 @@ export const UpsertTransactionDialog = ({
               : undefined
         })
         setIsOpen(false)
+        setCategoryId("")
         form.reset(
-          defaultValues ?? {
-            name: "",
-            date: new Date()
-          }
+          defaultValues
+            ? { ...defaultValues, date: new Date(defaultValues?.date) }
+            : {
+                name: "",
+                date: new Date()
+              }
         )
       } catch (error) {
         console.error("ERROR", { error })
@@ -165,11 +190,14 @@ export const UpsertTransactionDialog = ({
       onOpenChange={(open) => {
         setIsOpen(open)
         if (!open) {
+          setCategoryId("")
           form.reset(
-            defaultValues ?? {
-              name: "",
-              date: new Date()
-            }
+            defaultValues
+              ? { ...defaultValues, date: new Date(defaultValues?.date) }
+              : {
+                  name: "",
+                  date: new Date()
+                }
           )
           setCategoryId(otherCategory ? otherCategory.id.toString() : "")
         }
@@ -358,7 +386,7 @@ export const UpsertTransactionDialog = ({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Método de pagamento</FormLabel>
+                  <FormLabel>Data da transação</FormLabel>
                   <FormControl>
                     <Popover>
                       <PopoverTrigger asChild>

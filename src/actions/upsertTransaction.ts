@@ -42,7 +42,7 @@ export const upsertTransaction = async (params: upsertTransactionParams) => {
 
     await prisma.transaction.upsert({
       where: {
-        id: params.id || "id"
+        id: params.id || ""
       },
       update: { ...data, userId },
       create: { ...data, userId }

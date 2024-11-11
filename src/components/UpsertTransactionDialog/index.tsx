@@ -209,7 +209,7 @@ export const UpsertTransactionDialog = ({
             UpdateButton
           ) : (
             <Button className="rounded-full">
-              Editar Transação
+              <span className="hidden sm:block">Editar Transação</span>
               <ArrowDownUpIcon />
             </Button>
           )
@@ -217,7 +217,7 @@ export const UpsertTransactionDialog = ({
           CreateButton
         ) : (
           <Button className="rounded-full">
-            Adicionar Transação
+            <span className="hidden sm:block">Adicionar Transação</span>
             <ArrowDownUpIcon />
           </Button>
         )}
@@ -423,7 +423,7 @@ export const UpsertTransactionDialog = ({
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex gap-3 sm:gap-0">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancelar

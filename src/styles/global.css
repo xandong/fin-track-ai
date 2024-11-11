@@ -43,6 +43,13 @@ html,
 body,
 #__next {
   height: 100%;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -67,7 +74,7 @@ body {
     /* --primary: 102 59% 44%; Adjusted for #55B02E */
     --primary: 264 61% 38%; /* #56269D */
     --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 282 29% 48%;
+    --secondary: 271 30% 58%;
     --secondary-foreground: 240 5.9% 10%;
     --tertiary: 102 59% 44%; /* Adjusted for #55B02E */
     --tertiary-foreground: 355.7 100% 97.3%;
@@ -99,14 +106,14 @@ body {
     --popover-foreground: 0 0% 95%;
     --primary: 264 61% 38%; /* Adjusted for #56269D */
     --primary-foreground: 0 0 100%;
-    --secondary: 282 48% 64%;
+    --secondary: 284 42% 49%;
     --secondary-foreground: 0 0 100%;
     --tertiary: 102 59% 44%; /* Adjusted for #55B02E */
     --tertiary-foreground: 355.7 100% 97.3%;
     --muted: 0 0% 15%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 102 59% 44%;
-    --accent-foreground: 355.7 100% 97.3%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0 100%;
     /* --accent: 12 6.5% 15.1%; */
     /* --accent-foreground: 0 0 100%; */
     --destructive: 0 62.8% 30.6%;

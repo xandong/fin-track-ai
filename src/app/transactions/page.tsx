@@ -25,7 +25,7 @@ const Transactions = async () => {
       }
     },
     where: {
-      userId: userId || undefined
+      userId: userId
     }
   })
 
@@ -36,7 +36,7 @@ const Transactions = async () => {
           type: CategoryType.PUBLIC
         },
         {
-          userId: userId ?? undefined,
+          userId: userId,
           type: CategoryType.PRIVATE
         }
       ]

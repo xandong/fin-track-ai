@@ -9,7 +9,7 @@ import { dark } from "@clerk/themes"
 
 const mulish = Mulish({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "600", "500", "700", "800"],
   display: "swap"
 })
 
@@ -31,6 +31,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
+        <link rel="icon" href="/logo.svg" />
         <body className={`${mulish.className} dark antialiased`}>
           {children}
         </body>

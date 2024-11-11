@@ -1,8 +1,8 @@
 const formatDisplay = (str?: string) =>
   str ? `${str.charAt(0)}${str.slice(1).toLowerCase()}` : "-"
 
-export const formatTransactionCategory = (category?: string) => {
-  switch (category) {
+export const formatTransactionCategory = (categoryName?: string) => {
+  switch (categoryName) {
     case "HOUSING":
       return "Moradia"
 
@@ -31,6 +31,6 @@ export const formatTransactionCategory = (category?: string) => {
       return "Outro"
 
     default:
-      return formatDisplay(category)
+      return formatDisplay(categoryName)
   }
 }

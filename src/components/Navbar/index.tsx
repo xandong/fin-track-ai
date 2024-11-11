@@ -40,7 +40,7 @@ export const Navbar = () => {
         {NAVBAR_LIST.map((el) => (
           <div key={el.path}>
             <Link
-              className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} text-sm transition-colors duration-300`}
+              className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary " : "font-semibold text-zinc-500 hover:text-zinc-400/80 "} text-base transition-all duration-300`}
               href={el.path}
             >
               {el.label}

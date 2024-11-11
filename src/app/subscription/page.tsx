@@ -1,6 +1,5 @@
 "use server"
 
-import { Button } from "@/components/_ui/button"
 import { Navbar } from "@/components/Navbar"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
@@ -8,7 +7,6 @@ import CardSubscription from "./_components/cardSubscription"
 import { getPricesIds } from "@/actions/getPricesIds"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/_ui/tabs"
 import { getSubscriptionPage } from "@/actions/getSubscriptionPage"
-import { ScrollArea } from "@/components/_ui/scroll-area"
 
 const Subscription = async () => {
   const { userId } = await auth()
@@ -96,115 +94,112 @@ const Subscription = async () => {
   ]
 
   return (
-    <ScrollArea className="h-screen w-screen">
-      <div className="flex h-full w-full flex-col items-center">
-        <Navbar />
+    <div className="flex h-full w-full flex-col items-center">
+      <Navbar />
 
-        <main className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
-          <div className="flex w-full items-center justify-between">
-            <h1 className="text-2xl font-bold leading-8">Assinatura</h1>
-            <div>
-              <Button>Action</Button>
+      <main className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
+        <div className="flex w-full items-center justify-between">
+          <h1 className="text-2xl font-bold leading-8">Assinatura</h1>
+          <div />
+        </div>
+
+        <div className="flex flex-1">
+          <Tabs
+            defaultValue="monthly"
+            className="flex flex-1 flex-col items-center"
+          >
+            <TabsList className="grid w-[400px] grid-cols-2">
+              <TabsTrigger value="monthly">Mensal</TabsTrigger>
+              <TabsTrigger value="annually">Anual</TabsTrigger>
+            </TabsList>
+
+            <div className="flex pt-6">
+              <TabsContent
+                hidden
+                value="monthly"
+                className="flex flex-1 flex-col justify-start gap-6 xl:flex-row"
+              >
+                <CardSubscription
+                  key={"free-monthly"}
+                  priceId={undefined}
+                  title={"Plano Standard"}
+                  current
+                  price={0}
+                  list={standardList}
+                />
+
+                {!!advanced.monthly && (
+                  <CardSubscription
+                    key={advanced.monthly.priceId}
+                    priceId={advanced.monthly.priceId}
+                    title={advanced.monthly.title}
+                    price={advanced.monthly.price}
+                    list={advancedList}
+                  />
+                )}
+
+                {!!premium.monthly && (
+                  <CardSubscription
+                    key={premium.monthly.priceId}
+                    priceId={premium.monthly.priceId}
+                    title={premium.monthly.title}
+                    price={premium.monthly.price}
+                    list={premiumList}
+                  />
+                )}
+              </TabsContent>
+
+              <TabsContent
+                hidden
+                value="annually"
+                className="flex flex-1 flex-col justify-start gap-6 xl:flex-row"
+              >
+                <CardSubscription
+                  key={"free-annually"}
+                  priceId={undefined}
+                  title={"Plano Standard"}
+                  price={0}
+                  current
+                  list={standardList}
+                />
+
+                {!!advanced.annually && (
+                  <CardSubscription
+                    diffYear={
+                      (((advanced.monthly?.price || 1) * 12 -
+                        advanced.annually.price) /
+                        ((advanced.monthly?.price || 1) * 12)) *
+                      100
+                    }
+                    key={advanced.annually.priceId}
+                    priceId={advanced.annually.priceId}
+                    title={advanced.annually.title}
+                    price={advanced.annually.price}
+                    list={advancedList}
+                  />
+                )}
+
+                {!!premium.annually && (
+                  <CardSubscription
+                    diffYear={
+                      (((premium.monthly?.price || 1) * 12 -
+                        premium.annually.price) /
+                        ((premium.monthly?.price || 1) * 12)) *
+                      100
+                    }
+                    key={premium.annually.priceId}
+                    priceId={premium.annually.priceId}
+                    title={premium.annually.title}
+                    price={premium.annually.price}
+                    list={premiumList}
+                  />
+                )}
+              </TabsContent>
             </div>
-          </div>
-
-          <div className="flex flex-1">
-            <Tabs
-              defaultValue="monthly"
-              className="flex flex-1 flex-col items-center"
-            >
-              <TabsList className="grid w-[400px] grid-cols-2">
-                <TabsTrigger value="monthly">Assinatura mensal</TabsTrigger>
-                <TabsTrigger value="annually">Assinatura anual</TabsTrigger>
-              </TabsList>
-
-              <div className="flex pt-6">
-                <TabsContent
-                  hidden
-                  value="monthly"
-                  className="flex flex-1 flex-col justify-start gap-6 xl:flex-row"
-                >
-                  <CardSubscription
-                    key={"free-monthly"}
-                    priceId={undefined}
-                    title={"Standard"}
-                    price={0}
-                    list={standardList}
-                  />
-
-                  {!!advanced.monthly && (
-                    <CardSubscription
-                      key={advanced.monthly.priceId}
-                      priceId={advanced.monthly.priceId}
-                      title={advanced.monthly.title}
-                      price={advanced.monthly.price}
-                      list={advancedList}
-                    />
-                  )}
-
-                  {!!premium.monthly && (
-                    <CardSubscription
-                      key={premium.monthly.priceId}
-                      priceId={premium.monthly.priceId}
-                      title={premium.monthly.title}
-                      price={premium.monthly.price}
-                      list={premiumList}
-                    />
-                  )}
-                </TabsContent>
-
-                <TabsContent
-                  hidden
-                  value="annually"
-                  className="flex flex-1 flex-col justify-start gap-6 xl:flex-row"
-                >
-                  <CardSubscription
-                    key={"free-annually"}
-                    priceId={undefined}
-                    title={"Standard"}
-                    price={0}
-                    current
-                    list={standardList}
-                  />
-
-                  {!!advanced.annually && (
-                    <CardSubscription
-                      diffYear={
-                        (((advanced.monthly?.price || 1) * 12 -
-                          advanced.annually.price) /
-                          ((advanced.monthly?.price || 1) * 12)) *
-                        100
-                      }
-                      key={advanced.annually.priceId}
-                      priceId={advanced.annually.priceId}
-                      title={advanced.annually.title}
-                      price={advanced.annually.price}
-                      list={advancedList}
-                    />
-                  )}
-
-                  {!!premium.annually && (
-                    <CardSubscription
-                      diffYear={
-                        (((premium.monthly?.price || 1) * 12 -
-                          premium.annually.price) /
-                          ((premium.monthly?.price || 1) * 12)) *
-                        100
-                      }
-                      key={premium.annually.priceId}
-                      priceId={premium.annually.priceId}
-                      title={premium.annually.title}
-                      price={premium.annually.price}
-                      list={premiumList}
-                    />
-                  )}
-                </TabsContent>
-              </div>
-            </Tabs>
-          </div>
-        </main>
-      </div>
-    </ScrollArea>
+          </Tabs>
+        </div>
+      </main>
+    </div>
   )
 }
 

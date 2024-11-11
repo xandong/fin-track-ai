@@ -13,6 +13,7 @@ import { Separator } from "@/components/_ui/separator"
 import { CheckIcon, XIcon } from "lucide-react"
 import { createSripeCheckout } from "@/actions/createStripeCheckout"
 import { loadStripe } from "@stripe/stripe-js"
+import { useRouter } from "next/navigation"
 
 interface CardSubscriptionProps {
   priceId?: string
@@ -31,6 +32,7 @@ const CardSubscription = ({
   diffYear,
   current
 }: CardSubscriptionProps) => {
+  const router = useRouter()
   const formattedPrice = useMemo(() => {
     if (price === 0) return "0"
     return price.toFixed(2).toString().replaceAll(".", ",")
@@ -38,8 +40,9 @@ const CardSubscription = ({
 
   const handleAcquirePlanClick = useCallback(async () => {
     if (!priceId) return
-
-    const { sessionId } = await createSripeCheckout(priceId)
+    console.log({ priceId })
+    const { sessionId, url } = await createSripeCheckout(priceId)
+    console.log({ sessionId })
 
     if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
       throw new Error("Stripe publishable key not found")
@@ -53,8 +56,12 @@ const CardSubscription = ({
       throw new Error("Stripe not found")
     }
 
+    if (url) {
+      router.push(url)
+    }
+
     await stripe.redirectToCheckout({ sessionId })
-  }, [priceId])
+  }, [priceId, router])
 
   return (
     <Card className="h-fit w-[25rem] max-w-full">

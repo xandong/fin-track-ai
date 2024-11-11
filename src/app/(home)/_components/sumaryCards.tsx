@@ -38,7 +38,7 @@ const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
   const balance = depositsTotal - investmentsTotal - expensesTotal
 
   return (
-    <div className="grid h-full grid-cols-10 grid-rows-10 gap-x-4 gap-y-5 sm:grid-rows-5">
+    <div className="grid h-full grid-cols-10 grid-rows-4 gap-x-4 gap-y-5 sm:grid-rows-5">
       <div className="col-span-10 row-span-1">
         <SumaryCard
           title="Saldo"

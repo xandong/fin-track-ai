@@ -6,6 +6,7 @@ import { Transaction, TransactionCategory } from "@prisma/client"
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
 import { formatCurrency, formatTransactionCategory } from "@/utils/formatter"
 import { Progress } from "@/components/_ui/progress"
+import { ScrollArea } from "@/components/_ui/scroll-area"
 
 interface ExpensesPerCategoryProps {
   categories: TransactionCategory[]
@@ -24,25 +25,29 @@ export const ExpensesPerCategory = ({
         <span className="text-lg font-bold">Gastos por categoria</span>
         <div />
       </CardHeader>
-      <div className="h-[1px] w-[calc(100%-48px)] bg-white/10" />
-      <CardContent className="flex h-full max-h-[390px] w-full flex-col gap-2 overflow-y-auto pb-4 pt-0">
-        {transactions.map((transaction) => {
-          if (transaction.type !== "EXPENSE")
-            return <div key={transaction.id} />
 
-          const category = categories.find(
-            (category) => category.id === transaction.categoryId
-          )
-          return (
-            <ExpensesRow
-              key={transaction.id}
-              category={category}
-              percent={(Number(transaction.amount) * 100) / expensesTotal}
-              transaction={transaction}
-            />
-          )
-        })}
-      </CardContent>
+      <div className="h-[1px] w-[calc(100%-48px)] bg-white/10" />
+
+      <ScrollArea className="w-full flex-1">
+        <CardContent className="flex h-full max-h-[378px] w-full flex-col gap-2 pb-4 pt-0">
+          {transactions.map((transaction) => {
+            if (transaction.type !== "EXPENSE")
+              return <div key={transaction.id} />
+
+            const category = categories.find(
+              (category) => category.id === transaction.categoryId
+            )
+            return (
+              <ExpensesRow
+                key={transaction.id}
+                category={category}
+                percent={(Number(transaction.amount) * 100) / expensesTotal}
+                transaction={transaction}
+              />
+            )
+          })}
+        </CardContent>
+      </ScrollArea>
     </Card>
   )
 }
@@ -65,7 +70,7 @@ const ExpensesRow = ({ category, percent, transaction }: ExpensesRowProps) => {
     <div className="flex flex-col gap-[.625rem]">
       <div className="flex flex-row items-center justify-between">
         <div className="text-sm font-bold">
-          {formatTransactionCategory(category?.name)}
+          {formatTransactionCategory(category?.name ? category.name : "Outro")}
         </div>
         <div className="text-sm font-bold">{percent.toFixed(2)}%</div>
       </div>

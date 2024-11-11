@@ -3,9 +3,13 @@ import { AddTransactionCategory } from "."
 
 describe("<AddTransactionCategory />", () => {
   it("should render the heading", () => {
-    const { container } = render(<AddTransactionCategory />)
+    const { container } = render(
+      <AddTransactionCategory categories={[]} handleNewCategory={() => {}} />
+    )
 
-    expect(screen.getByRole("heading", { name: /AddTransactionCategory/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: /AddTransactionCategory/i })
+    ).toBeInTheDocument()
 
     expect(container.firstChild).toMatchSnapshot()
   })

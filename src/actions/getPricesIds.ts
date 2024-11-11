@@ -49,7 +49,7 @@ export const getPricesIds = async () => {
   data.forEach((price) => {
     if (advancedMonthlyPrice && price.product === advancedMonthlyPrice) {
       return (prices.advanced.monthly = {
-        title: "Advanced",
+        title: "Plano Advanced",
         priceId: price.id,
         price: price.unit_amount ? price.unit_amount / 100 : 0
       })
@@ -57,7 +57,7 @@ export const getPricesIds = async () => {
 
     if (advancedYearlyPrice && price.product === advancedYearlyPrice) {
       return (prices.advanced.annually = {
-        title: "Advanced",
+        title: "Plano Advanced",
         priceId: price.id,
         price: price.unit_amount ? price.unit_amount / 100 : 0
       })
@@ -65,7 +65,7 @@ export const getPricesIds = async () => {
 
     if (premiumMonthlyPrice && price.product === premiumMonthlyPrice) {
       return (prices.premium.monthly = {
-        title: "Premium",
+        title: "Plano Premium",
         priceId: price.id,
         price: price.unit_amount ? price.unit_amount / 100 : 0
       })
@@ -73,7 +73,7 @@ export const getPricesIds = async () => {
 
     if (premiumYearlyPrice && price.product === premiumYearlyPrice) {
       return (prices.premium.annually = {
-        title: "Advanced",
+        title: "Plano Premium",
         priceId: price.id,
         price: price.unit_amount ? price.unit_amount / 100 : 0
       })

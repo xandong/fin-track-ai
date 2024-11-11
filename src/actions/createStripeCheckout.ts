@@ -18,7 +18,7 @@ export const createSripeCheckout = async (priceId: string) => {
   const stripe = initStripe()
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["pix", "card"],
+    payment_method_types: ["card"],
     mode: "subscription",
     success_url: BASE_HOST_URL,
     cancel_url: BASE_HOST_URL,
@@ -35,5 +35,6 @@ export const createSripeCheckout = async (priceId: string) => {
     }
   })
 
-  return { sessionId: session.id }
+  console.log({ session })
+  return { sessionId: session.id, url: session.url }
 }

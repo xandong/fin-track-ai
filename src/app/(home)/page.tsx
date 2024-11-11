@@ -9,8 +9,7 @@ import { Button } from "@/components/_ui/button"
 import TransactionsList from "./_components/transactionsList"
 import SumaryCards from "./_components/sumaryCards"
 import TimeSelect from "./_components/timeSelect"
-import { prisma } from "@/lib/prisma"
-import { CategoryType } from "@prisma/client"
+import { getDashboard } from "@/actions/getDashboard"
 
 interface HomeParams {
   searchParams: {
@@ -38,33 +37,10 @@ const Home = async ({ searchParams }: HomeParams) => {
   const selectedMonth = month ? month : (new Date().getMonth() + 1).toString()
   const selectedYear = year ? year : new Date().getFullYear().toString()
 
-  const where = {
-    date: {
-      gte: new Date(`${selectedYear}-${selectedMonth}-01`),
-      lt: new Date(`${selectedYear}-${selectedMonth}-31`)
-    }
-  }
-
-  const [transactions, categories] = await Promise.all([
-    prisma.transaction.findMany({
-      where: {
-        ...where
-      }
-    }),
-    prisma.transactionCategory.findMany({
-      where: {
-        OR: [
-          {
-            type: CategoryType.PUBLIC
-          },
-          {
-            userId: userId,
-            type: CategoryType.PRIVATE
-          }
-        ]
-      }
-    })
-  ])
+  const { categories, transactions } = await getDashboard(
+    selectedYear,
+    selectedMonth
+  )
 
   return (
     <div className="flex h-full w-full flex-1 flex-col items-center">

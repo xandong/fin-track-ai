@@ -38,8 +38,8 @@ const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
   const balance = depositsTotal - investmentsTotal - expensesTotal
 
   return (
-    <div className="grid h-full grid-cols-10 grid-rows-5 gap-6">
-      <div className="col-span-10">
+    <div className="grid h-full grid-cols-10 grid-rows-10 gap-x-4 gap-y-5 sm:grid-rows-5">
+      <div className="col-span-10 row-span-1">
         <SumaryCard
           title="Saldo"
           size="large"
@@ -53,9 +53,9 @@ const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
           }
         />
       </div>
-      <div className="col-span-10 sm:col-span-4">
+      <div className="col-span-10 row-span-1 sm:col-span-4">
         <SumaryCard
-          title="Investido"
+          title="Investimentos"
           amount={investmentsTotal}
           highlighted
           icon={
@@ -66,9 +66,9 @@ const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
         />
       </div>
 
-      <div className="col-span-10 sm:col-span-3">
+      <div className="col-span-10 row-span-1 sm:col-span-3">
         <SumaryCard
-          title="Depositos"
+          title="Receita"
           amount={depositsTotal}
           icon={
             <div className="rounded-xl bg-tertiary/10 p-[.625rem] text-tertiary">
@@ -78,7 +78,7 @@ const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
         />
       </div>
 
-      <div className="col-span-10 sm:col-span-3">
+      <div className="col-span-10 row-span-1 sm:col-span-3">
         <SumaryCard
           title="Despesas"
           amount={expensesTotal}

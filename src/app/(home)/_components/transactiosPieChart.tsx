@@ -31,7 +31,7 @@ export function TransactionsPieChart({
 }: TransactionsPieChartProps) {
   const chartConfig = {
     [TransactionType.DEPOSIT]: {
-      label: "Depósitos",
+      label: "Receita",
       color: "hsla(102, 59%, 44%, 0.9)"
     },
     [TransactionType.EXPENSE]: {
@@ -81,16 +81,16 @@ export function TransactionsPieChart({
               data={chartData}
               dataKey="total"
               nameKey="type"
-              innerRadius={75}
+              innerRadius={70}
               strokeWidth={5}
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex flex-row justify-center gap-2 text-sm">
-        <div className="flex w-[227px] flex-col items-center gap-3">
+        <div className="flex w-[80%] flex-col items-center gap-3">
           <PieDescriptionCard
-            type="Ganhos"
+            type="Receita"
             percent={(depositsTotal * 100) / totalAmount}
             icon={
               <div className="rounded-xl bg-tertiary/10 p-[.625rem] text-tertiary">
@@ -100,7 +100,7 @@ export function TransactionsPieChart({
           />
 
           <PieDescriptionCard
-            type="Gastos"
+            type="Despesas"
             percent={(expensesTotal * 100) / totalAmount}
             icon={
               <div className="rounded-xl bg-danger/10 p-[.625rem] text-danger">

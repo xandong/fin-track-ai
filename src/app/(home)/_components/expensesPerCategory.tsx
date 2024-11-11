@@ -1,11 +1,11 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Transaction, TransactionCategory } from "@prisma/client"
 
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
 import { formatTransactionCategory } from "@/utils/formatter"
 import { Progress } from "@/components/_ui/progress"
-import { useEffect, useState } from "react"
 
 interface ExpensesPerCategoryProps {
   categories: TransactionCategory[]
@@ -25,7 +25,7 @@ export const ExpensesPerCategory = ({
         <div />
       </CardHeader>
       <div className="h-[1px] w-[calc(100%-48px)] bg-white/10" />
-      <CardContent className="flex h-full max-h-[380px] w-full flex-col gap-2 overflow-y-scroll pt-0">
+      <CardContent className="flex h-full max-h-[390px] w-full flex-col gap-2 overflow-y-auto pb-4 pt-0">
         {transactions.map((transaction) => {
           if (transaction.type !== "EXPENSE")
             return <div key={transaction.id} />
@@ -73,7 +73,7 @@ const ExpensesRow = ({ category, percent, transaction }: ExpensesRowProps) => {
       <Progress
         value={progress}
         className="bg-zinc-900"
-        indicatorColor="bg-zinc-600"
+        indicatorColor="bg-zinc-500"
       />
 
       <div className="text-sm font-semibold text-zinc-500">

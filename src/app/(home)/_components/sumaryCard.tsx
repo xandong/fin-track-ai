@@ -30,9 +30,11 @@ const SumaryCard = ({
 }: SumaryCardProps) => {
   return (
     <Card className={`h-full ${highlighted ? "bg-zinc-900/70" : ""}`}>
-      <CardHeader className="flex-row items-center gap-2">
-        {icon}
-        <p className="text-sm font-semibold text-muted-foreground">{title}</p>
+      <CardHeader className="">
+        <div className="m-0 flex flex-row items-center gap-2">
+          <div>{icon}</div>
+          <p className="m-0 text-sm font-semibold text-zinc-500">{title}</p>
+        </div>
       </CardHeader>
       <CardContent className="flex items-center justify-between">
         <p

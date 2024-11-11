@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@clerk/nextjs/server"
 import { CategoryType } from "@prisma/client"
 
-export const getDashboard = async (year: string, month: string) => {
+export const getDashboardPage = async (year: string, month: string) => {
   const { userId } = await auth()
 
   const where = {
@@ -16,6 +16,9 @@ export const getDashboard = async (year: string, month: string) => {
     prisma.transaction.findMany({
       where: {
         ...where
+      },
+      orderBy: {
+        date: "desc"
       }
     }),
     prisma.transactionCategory.findMany({
@@ -29,12 +32,13 @@ export const getDashboard = async (year: string, month: string) => {
             type: CategoryType.PRIVATE
           }
         ]
-      }
+      },
+      orderBy: { name: "asc" }
     })
   ])
 
   return {
-    transactions,
-    categories
+    transactions: JSON.parse(JSON.stringify(transactions)),
+    categories: JSON.parse(JSON.stringify(categories))
   }
 }

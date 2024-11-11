@@ -23,7 +23,6 @@ const NAVBAR_LIST: NavbarList[] = [
 
 export const Navbar = () => {
   const path = usePathname()
-  console.log(path)
 
   return (
     <div className="flex w-full items-center justify-between border-b border-b-white/10 px-8 py-4">
@@ -40,7 +39,7 @@ export const Navbar = () => {
         {NAVBAR_LIST.map((el) => (
           <div key={el.path}>
             <Link
-              className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary " : "font-semibold text-zinc-500 hover:text-zinc-400/80 "} text-base transition-all duration-300`}
+              className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} text-base transition-all duration-300`}
               href={el.path}
             >
               {el.label}

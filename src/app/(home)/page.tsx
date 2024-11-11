@@ -9,7 +9,7 @@ import { Button } from "@/components/_ui/button"
 import TransactionsList from "./_components/transactionsList"
 import SumaryCards from "./_components/sumaryCards"
 import TimeSelect from "./_components/timeSelect"
-import { getDashboard } from "@/actions/getDashboard"
+import { getDashboardPage } from "@/actions/getDashboardPage"
 
 interface HomeParams {
   searchParams: {
@@ -37,7 +37,7 @@ const Home = async ({ searchParams }: HomeParams) => {
   const selectedMonth = month ? month : (new Date().getMonth() + 1).toString()
   const selectedYear = year ? year : new Date().getFullYear().toString()
 
-  const { categories, transactions } = await getDashboard(
+  const { categories, transactions } = await getDashboardPage(
     selectedYear,
     selectedMonth
   )

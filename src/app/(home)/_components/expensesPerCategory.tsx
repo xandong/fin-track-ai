@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Transaction, TransactionCategory } from "@prisma/client"
 
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
-import { formatTransactionCategory } from "@/utils/formatter"
+import { formatCurrency, formatTransactionCategory } from "@/utils/formatter"
 import { Progress } from "@/components/_ui/progress"
 
 interface ExpensesPerCategoryProps {
@@ -77,10 +77,7 @@ const ExpensesRow = ({ category, percent, transaction }: ExpensesRowProps) => {
       />
 
       <div className="text-sm font-semibold text-zinc-500">
-        {Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL"
-        }).format(Number(transaction.amount))}
+        {formatCurrency(transaction.amount)}
       </div>
     </div>
   )

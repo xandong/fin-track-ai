@@ -3,6 +3,7 @@ import { $Enums } from "@prisma/client"
 
 import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
+import { formatCurrency } from "@/utils/formatter"
 
 interface SumaryCardProps {
   icon: ReactNode
@@ -40,10 +41,7 @@ const SumaryCard = ({
         <p
           className={`font-bold ${size === "large" ? "text-4xl" : "text-2xl"}`}
         >
-          {Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-          }).format(Number(amount))}
+          {formatCurrency(amount)}
         </p>
 
         <div>

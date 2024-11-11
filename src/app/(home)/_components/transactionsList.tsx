@@ -13,6 +13,7 @@ import {
 import Link from "next/link"
 import { useMemo } from "react"
 import Image from "next/image"
+import { formatCurrency } from "@/utils/formatter"
 
 interface TransactionsListProps {
   transactions: Transaction[]
@@ -70,10 +71,7 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
   }, [transaction.paymentMethod])
 
   const amount = useMemo(() => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL"
-    }).format(Number(transaction.amount))
+    return formatCurrency(transaction.amount)
   }, [transaction.amount])
 
   return (

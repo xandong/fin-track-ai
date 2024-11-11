@@ -11,6 +11,7 @@ import { TransactionTypeBadge } from "../_components/typeBadge"
 import { TransactionCategoryDisplay } from "@/components/TransactionCategoryDisplay"
 import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
 import { TransactionDeleteDialog } from "../_components/transactionDeleteDialog"
+import { formatCurrency } from "@/utils/formatter"
 
 type MyColumnProps = {
   categories: TransactionCategory[]
@@ -147,10 +148,7 @@ export const getColumns = ({
         )
       },
       cell: ({ row: { original: transaction } }) =>
-        new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL"
-        }).format(Number(transaction.amount)),
+        formatCurrency(transaction.amount),
       sortingFn: (rowA, rowB) =>
         Number(rowA.original.amount) - Number(rowB.original.amount)
     },

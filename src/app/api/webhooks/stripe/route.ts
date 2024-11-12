@@ -15,6 +15,7 @@ export const POST = async (request: Request) => {
   })
 
   let event: Stripe.Event
+  console.debug("HandlerStripeEvent")
   try {
     event = stripe.webhooks.constructEvent(
       text,
@@ -41,6 +42,14 @@ export const POST = async (request: Request) => {
       // Atualiza o usuário com o novo plano
       // eslint-disable-next-line no-case-declarations
       // eslint-disable-next-line no-case-declarations
+
+      console.debug({
+        clerkUserId,
+        customer,
+        subscription,
+        priceId,
+        subscription_details
+      })
 
       try {
         ClerkClient.users.updateUser(clerkUserId, {

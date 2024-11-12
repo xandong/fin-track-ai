@@ -62,7 +62,7 @@ const Home = async ({ searchParams }: HomeParams) => {
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold leading-8">Dashboard</h1>
           <div className="flex flex-row gap-2">
-            <ReportAiDialog month={selectedMonth} year={selectedYear} />
+            <ReportAiDialog month={selectedMonth} year={selectedYear} free={currentSubscription === "free"} />
 
             <TimeSelect />
           </div>

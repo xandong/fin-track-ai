@@ -19,19 +19,22 @@ import jsPDF from "jspdf"
 import { generateAiReport } from "@/app/(home)/_actons/genereteAiReport"
 import { marked } from "marked"
 import { useIsMobile } from "@/hooks/use-mobile"
+import Link from "next/link"
 
 interface ReportAiDialogProps {
   year: string
   month: string
   initialReport?: string | null
   trigger?: React.ReactNode
+  free?: boolean
 }
 
 export const ReportAiDialog = ({
   month,
   year,
   trigger,
-  initialReport = null
+  initialReport = null,
+  free
 }: ReportAiDialogProps) => {
   const isMobile = useIsMobile()
   const [report, setReport] = useState<string | null>(initialReport)
@@ -111,8 +114,9 @@ export const ReportAiDialog = ({
           <DialogTitle>Relatório IA</DialogTitle>
           {!initialReport && (
             <DialogDescription>
-              Use Inteligência Artificial para gerar um relatório com insights
-              sobre suas finanças.
+              {free
+                ? "Você não tem acesso a este recurso de Inteligência Artificial. Assine um plano agora para desbloquear."
+                : "Use Inteligência Artificial para gerar um relatório com insights sobre suas finanças."}
             </DialogDescription>
           )}
         </DialogHeader>
@@ -128,7 +132,13 @@ export const ReportAiDialog = ({
             <Button variant={"outline"}>Cancelar</Button>
           </DialogClose>
 
-          {!initialReport && (
+          {free && (
+            <Button asChild>
+              <Link href={"/subscription"}>Ir para planos</Link>
+            </Button>
+          )}
+
+          {!free && !initialReport && (
             <Button
               className="w-[132px]"
               disabled={isLoading}

@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/_ui/tooltip"
+import { usePathname } from "next/navigation"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -268,6 +269,7 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
+  const pathname = usePathname()
   const { toggleSidebar } = useSidebar()
 
   return (
@@ -276,7 +278,10 @@ const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7 bg-zinc-900 hover:bg-zinc-900", className)}
+      className={cn(
+        `ml-3 mt-5 h-7 w-7 bg-zinc-900 hover:bg-zinc-900 ${pathname === "/login" ? "hidden" : ""} `,
+        className
+      )}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()

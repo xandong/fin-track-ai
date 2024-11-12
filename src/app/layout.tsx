@@ -37,7 +37,7 @@ export default function RootLayout({
           <SubscriptionProvider>
             <ScrollArea className="w-hull h-full">
               <SidebarProvider>
-                <SidebarTrigger />
+                <SidebarTrigger size={"default"} />
                 {children}
               </SidebarProvider>
             </ScrollArea>

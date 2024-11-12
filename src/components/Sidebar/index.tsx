@@ -31,7 +31,7 @@ interface SidebarList {
   path: string
   icon: ReactNode
 }
-const SIDEBAR_LIST: SidebarList[] = [
+export const SIDEBAR_LIST: SidebarList[] = [
   { label: "Dashboard", path: "/", icon: <HouseIcon /> },
   {
     label: "Transações",
@@ -42,6 +42,11 @@ const SIDEBAR_LIST: SidebarList[] = [
     label: "Assinatura",
     path: "/subscription",
     icon: <CaptionsIcon />
+  },
+  {
+    label: "Relatórios",
+    path: "/reports",
+    icon: <NotepadTextIcon />
   }
 ]
 
@@ -53,7 +58,7 @@ export const Sidebar = ({ reportsAccess }: SidebarProps) => {
   const path = usePathname()
 
   return (
-    <UISidebar className="w-60">
+    <UISidebar>
       <SidebarHeader className="relative p-4">
         <SidebarTrigger className="absolute right-1 top-[1.3rem]">
           <PanelRightIcon size={24} />
@@ -72,33 +77,25 @@ export const Sidebar = ({ reportsAccess }: SidebarProps) => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {SIDEBAR_LIST.map((el) => (
-                <SidebarMenuItem key={el.path}>
-                  <SidebarMenuButton asChild className="pl-4 text-base">
-                    <Link
-                      className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} transition-all duration-300`}
-                      href={el.path}
-                    >
-                      {el.icon}
-                      {el.label}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {SIDEBAR_LIST.map((el) => {
+                if (el.path === "/reports" && !reportsAccess) {
+                  return <div key={el.path} />
+                }
 
-              {reportsAccess && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild className="py-4 pl-4 text-base">
-                    <Link
-                      className={`${path === "/reports" ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"}transition-all duration-300`}
-                      href={"/reports"}
-                    >
-                      {<NotepadTextIcon />}
-                      Relatórios
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
+                return (
+                  <SidebarMenuItem key={el.path}>
+                    <SidebarMenuButton asChild className="pl-4 text-base">
+                      <Link
+                        className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} transition-all duration-300`}
+                        href={el.path}
+                      >
+                        {el.icon}
+                        {el.label}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -1,4 +1,4 @@
-export const categories: string[] = [
+export const DEFAULT_CATEGORIES: string[] = [
   "HOUSING",
   "TRANSPORTATION",
   "FOOD",
@@ -7,5 +7,5 @@ export const categories: string[] = [
   "UTILITY",
   "SALARY",
   "EDUCATION",
-  "OTHER",
+  "OTHER"
 ]

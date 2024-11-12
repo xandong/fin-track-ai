@@ -13,9 +13,16 @@ import { ExpensesPerCategory } from "./expensesPerCategory"
 interface SumaryCardsProps {
   transactions: Transaction[]
   categories: TransactionCategory[]
+  canAddTransaction?: boolean
+  canAddCategory?: boolean
 }
 
-const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
+const SumaryCards = async ({
+  categories,
+  transactions,
+  canAddTransaction,
+  canAddCategory
+}: SumaryCardsProps) => {
   const { depositsTotal, investmentsTotal, expensesTotal } =
     transactions.reduce(
       (totals, transaction) => {
@@ -45,6 +52,8 @@ const SumaryCards = async ({ categories, transactions }: SumaryCardsProps) => {
           size="large"
           amount={balance}
           categories={categories}
+          canAddTransaction={canAddTransaction}
+          canAddCategory={canAddCategory}
           highlighted
           icon={
             <div className="rounded-xl bg-black p-[.625rem]">

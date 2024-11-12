@@ -3,7 +3,7 @@
 import { auth, clerkClient } from "@clerk/nextjs/server"
 import { getPricesIds } from "./getPricesIds"
 
-export type CurretnSubscriptionType =
+export type CurrentSubscriptionType =
   | "free"
   | "advanced-monthly"
   | "advanced-yearly"
@@ -11,7 +11,7 @@ export type CurretnSubscriptionType =
   | "premium-yearly"
 
 export const getCurrentSubscription =
-  async (): Promise<CurretnSubscriptionType> => {
+  async (): Promise<CurrentSubscriptionType> => {
     const { userId } = await auth()
 
     if (!userId) throw new Error("Unautenticated")

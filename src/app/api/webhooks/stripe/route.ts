@@ -42,12 +42,6 @@ export const POST = async (request: Request) => {
       // eslint-disable-next-line no-case-declarations
       // eslint-disable-next-line no-case-declarations
 
-      console.log({
-        customer,
-        subscription,
-        subscription_details
-      })
-
       try {
         ClerkClient.users.updateUser(clerkUserId, {
           privateMetadata: {
@@ -80,7 +74,7 @@ export const POST = async (request: Request) => {
       break
     }
     default:
-      console.log(`Unhandled event type ${event.type}`)
+      console.debug(`Unhandled event type ${event.type}`)
   }
 
   return NextResponse.json({ received: true })

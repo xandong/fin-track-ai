@@ -52,6 +52,12 @@ import { Calendar } from "../_ui/calendar"
 import { TransactionCategoryDisplay } from "../TransactionCategoryDisplay"
 import { upsertTransaction } from "@/actions/upsertTransaction"
 import { AddTransactionCategory } from "../AddTransactionCategory"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "../_ui/tooltip"
 
 const formSchema = z.object({
   name: z
@@ -88,6 +94,8 @@ interface UpsertTransactionDialogProps {
   defaultValues?: DefaultValues
   CreateButton?: React.ReactNode
   UpdateButton?: React.ReactNode
+  canAddCategory?: boolean
+  canAddTransaction?: boolean
 }
 
 export const UpsertTransactionDialog = ({
@@ -95,7 +103,9 @@ export const UpsertTransactionDialog = ({
   defaultValues,
   CreateButton,
   UpdateButton,
-  transactionId
+  transactionId,
+  canAddCategory,
+  canAddTransaction
 }: UpsertTransactionDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const otherCategory = categories.find((category) => category.name == "OTHER")
@@ -345,13 +355,24 @@ export const UpsertTransactionDialog = ({
               </FormItem>
             )}
 
-            {type === "EXPENSE" &&
-              otherCategory?.id.toString() === categoryId && (
-                <AddTransactionCategory
-                  categories={categories}
-                  handleNewCategory={handleAddNewCategory}
-                />
-              )}
+            {type === "EXPENSE" && (
+              // otherCategory?.id.toString() === categoryId &&
+              <TooltipProvider disableHoverableContent={false}>
+                <Tooltip disableHoverableContent={false}>
+                  <TooltipTrigger asChild>
+                    <AddTransactionCategory
+                      categories={categories}
+                      disabled={!canAddCategory}
+                      handleNewCategory={handleAddNewCategory}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {!canAddCategory &&
+                      "Você atingiu o limite de Categorias Personalizadas. Um upgrade de plano permitirá criar mais."}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
 
             <FormField
               control={form.control}
@@ -429,9 +450,19 @@ export const UpsertTransactionDialog = ({
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">
-                {defaultValues ? "Salvar" : "Adicionar"}
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button type="submit">
+                      {defaultValues ? "Salvar" : "Adicionar"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {!canAddTransaction &&
+                      "Você atingiu o limite de transações. Um upgrade de plano permitirá mais transações."}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </DialogFooter>
           </form>
         </Form>

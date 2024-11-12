@@ -6,6 +6,8 @@ import { Transaction, TransactionCategory } from "@prisma/client"
 import { getColumns } from "../_columns"
 
 type TransactionsTableProps = {
+  canAddCategory: boolean
+  canAddTransaction: boolean
   transactions: (Transaction & {
     category: { name: string } | null
   })[]
@@ -16,9 +18,11 @@ type TransactionsTableProps = {
 export const TransactionsTable = ({
   transactions,
   categories,
-  itemsPerPage = 10
+  itemsPerPage = 10,
+  canAddCategory,
+  canAddTransaction
 }: TransactionsTableProps) => {
-  const columns = getColumns({ categories })
+  const columns = getColumns({ categories, canAddCategory, canAddTransaction })
 
   return (
     <DataTable

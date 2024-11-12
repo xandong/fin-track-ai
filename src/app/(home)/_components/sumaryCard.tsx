@@ -1,24 +1,19 @@
 import { ReactNode } from "react"
-import { $Enums } from "@prisma/client"
+import { TransactionCategory } from "@prisma/client"
 
 import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
 import { formatCurrency } from "@/utils/formatter"
 
 interface SumaryCardProps {
+  canAddTransaction?: boolean
+  canAddCategory?: boolean
   icon: ReactNode
   title: string
   amount: number
   highlighted?: boolean
   size?: "small" | "large"
-  categories?: {
-    userId: string | null
-    id: number
-    name: string
-    type: $Enums.CategoryType
-    createdAt: Date
-    updateAt: Date
-  }[]
+  categories?: TransactionCategory[]
 }
 
 const SumaryCard = ({
@@ -27,7 +22,9 @@ const SumaryCard = ({
   title,
   highlighted,
   size = "small",
-  categories
+  categories,
+  canAddTransaction,
+  canAddCategory
 }: SumaryCardProps) => {
   return (
     <Card className={`h-full ${highlighted ? "bg-zinc-900/70" : ""}`}>
@@ -46,7 +43,11 @@ const SumaryCard = ({
 
         <div>
           {size === "large" && categories && (
-            <UpsertTransactionDialog categories={categories} />
+            <UpsertTransactionDialog
+              categories={categories}
+              canAddTransaction={canAddTransaction}
+              canAddCategory={canAddCategory}
+            />
           )}
         </div>
       </CardContent>

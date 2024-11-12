@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  CurretnSubscriptionType,
+  CurrentSubscriptionType,
   getCurrentSubscription
 } from "@/actions/getCurrentSubscription"
 import {
@@ -13,12 +13,12 @@ import {
 } from "react"
 
 const SubscriptionContext = createContext<{
-  subscriptionPlan: CurretnSubscriptionType
+  subscriptionPlan: CurrentSubscriptionType
 }>({ subscriptionPlan: "free" })
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [subscriptionPlan, setSubscriptionPlan] =
-    useState<CurretnSubscriptionType>("free")
+    useState<CurrentSubscriptionType>("free")
 
   useEffect(() => {
     const getSubscriptionPlan = async () => {

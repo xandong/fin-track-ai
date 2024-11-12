@@ -21,7 +21,11 @@ const NAVBAR_LIST: NavbarList[] = [
   }
 ]
 
-export const Navbar = () => {
+interface NavBarProps {
+  reportsAccess?: boolean
+}
+
+export const Navbar = ({ reportsAccess }: NavBarProps) => {
   const path = usePathname()
 
   return (
@@ -46,6 +50,15 @@ export const Navbar = () => {
             </Link>
           </div>
         ))}
+
+        {reportsAccess && (
+          <Link
+            className={`${path === "/reports" ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} text-base transition-all duration-300`}
+            href={"/reports"}
+          >
+            Relatórios
+          </Link>
+        )}
       </div>
       <div>
         <UserButton showName />

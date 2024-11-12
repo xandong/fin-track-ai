@@ -22,6 +22,7 @@ import { formatTransactionCategory } from "@/utils/formatter"
 
 interface AddTransactionCategoryProps {
   categories: TransactionCategory[]
+  disabled?: boolean
   // eslint-disable-next-line no-unused-vars
   handleNewCategory: (category: {
     name: string
@@ -35,6 +36,7 @@ interface AddTransactionCategoryProps {
 
 export const AddTransactionCategory = ({
   categories,
+  disabled,
   handleNewCategory
 }: AddTransactionCategoryProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -97,7 +99,7 @@ export const AddTransactionCategory = ({
         }
       }}
     >
-      <DialogTrigger asChild className="w-full">
+      <DialogTrigger asChild className="w-full" disabled={disabled}>
         <Button className="w-full rounded-full" variant="outline">
           Adicionar novo Gasto
           <DollarSign />

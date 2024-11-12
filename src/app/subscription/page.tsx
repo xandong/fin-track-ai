@@ -6,9 +6,10 @@ import { redirect } from "next/navigation"
 import CardSubscription from "./_components/cardSubscription"
 import { getPricesIds } from "@/actions/getPricesIds"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/_ui/tabs"
-import { getSubscriptionPage } from "@/actions/getSubscriptionPage"
+import { getUserCountsPerMonth } from "@/actions/getUserCountsPerMonth"
 import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
 import { ManageSubscription } from "./_components/manageSubscription"
+import { DEFAULT_LIMITS } from "@/utils/constants/defaults"
 
 const Subscription = async () => {
   const { userId } = await auth()
@@ -17,8 +18,8 @@ const Subscription = async () => {
     redirect("/login")
   }
 
-  const { categories: categoriesCount, transactions: transactionsCount } =
-    await getSubscriptionPage()
+  const { categoriesCount, transactionsCount, reportsCount } =
+    await getUserCountsPerMonth()
 
   const {
     prices: { advanced, premium }
@@ -28,45 +29,45 @@ const Subscription = async () => {
   const standardList: { has: boolean; label: string }[] = [
     {
       has: true,
-      label: `Apenas 5 transações por dia (${transactionsCount}/5)`
+      label: `Apenas ${DEFAULT_LIMITS.free.transactions} transações por dia (${transactionsCount}/${DEFAULT_LIMITS.free.transactions})`
     },
     {
       has: true,
-      label: `Apenas 3 novas categorias (${categoriesCount}/3)`
+      label: `Apenas ${DEFAULT_LIMITS.free.categories} novas categorias (${categoriesCount}/${DEFAULT_LIMITS.free.categories})`
     },
     {
       has: false,
-      label: "Relatórios de IA ilimitados"
+      label: "Gere Relatórios Avançados com IA"
     },
     {
       has: false,
-      label: "Transações ilimitadas"
+      label: "Adicione Transações ilimitadas"
     },
     {
       has: false,
-      label: "Categorias de gasto ilimitadas"
+      label: "Crie Categorias de gasto ilimitadas"
     }
   ]
   const advancedList: { has: boolean; label: string }[] = [
     {
       has: true,
-      label: `Apenas 15 transações por dia (${transactionsCount}/15)`
+      label: `Apenas ${DEFAULT_LIMITS.advanced.transactions} transações por dia (${transactionsCount}/${DEFAULT_LIMITS.advanced.transactions})`
     },
     {
       has: true,
-      label: `Apenas 15 novas categorias (${categoriesCount}/15)`
+      label: `Apenas ${DEFAULT_LIMITS.advanced.categories} novas categorias (${categoriesCount}/${DEFAULT_LIMITS.advanced.categories})`
     },
     {
       has: true,
-      label: "Apenas 5 Relatórios de IA por mês (0/5)"
+      label: `Apenas ${DEFAULT_LIMITS.advanced.reports} Relatórios com IA por mês (${reportsCount}/${DEFAULT_LIMITS.advanced.reports})`
     },
     {
       has: false,
-      label: "Transações ilimitadas"
+      label: "Adicione Transações ilimitadas"
     },
     {
       has: false,
-      label: "Categorias de gasto ilimitadas"
+      label: "Crie Categorias de gasto ilimitadas"
     }
   ]
   const premiumList: { has: boolean; label: string }[] = [
@@ -80,12 +81,12 @@ const Subscription = async () => {
     },
     {
       has: true,
-      label: "Gere Relatórios Avançados Ilimitados com IA"
+      label: "Gere Relatórios Avançados com IA"
     },
-    // {
-    //   has: true,
-    //   label: "Salve e Organize seus Relatórios para Acessos Futuros"
-    // },
+    {
+      has: true,
+      label: "Salve e Organize seus Relatórios para Acessos Futuros"
+    },
     {
       has: true,
       label: "Exporte seus Relatórios em PDF para Analisar Quando Quiser"
@@ -98,7 +99,7 @@ const Subscription = async () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center">
-      <Navbar />
+      <Navbar reportsAccess={subscriptionPlan !== "free"} />
 
       <main className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
         <div className="flex w-full items-center justify-between">

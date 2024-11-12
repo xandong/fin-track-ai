@@ -15,10 +15,14 @@ import { formatCurrency } from "@/utils/formatter"
 
 type MyColumnProps = {
   categories: TransactionCategory[]
+  canAddCategory: boolean
+  canAddTransaction: boolean
 }
 
 export const getColumns = ({
-  categories
+  categories,
+  canAddCategory,
+  canAddTransaction
 }: MyColumnProps): ColumnDef<
   {
     category: {
@@ -158,6 +162,8 @@ export const getColumns = ({
       cell: ({ row: { original: transaction } }) => (
         <div className="flex justify-end gap-1">
           <UpsertTransactionDialog
+            canAddCategory={canAddCategory}
+            canAddTransaction={canAddTransaction}
             categories={categories}
             transactionId={transaction.id}
             defaultValues={{

@@ -18,9 +18,13 @@ import {
 import { usePathname } from "next/navigation"
 import { SIDEBAR_LIST } from "./Sidebar"
 import Link from "next/link"
+import { useSidebar } from "./_ui/sidebar"
 
 export function Breadcrumb() {
   const pathname = usePathname()
+  const { isMobile, open } = useSidebar()
+
+  if (!isMobile && open) return <div />
 
   return (
     <BreadcrumbUI>

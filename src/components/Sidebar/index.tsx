@@ -60,7 +60,7 @@ export const Sidebar = ({ reportsAccess }: SidebarProps) => {
   return (
     <UISidebar>
       <SidebarHeader className="relative p-4">
-        <SidebarTrigger className="absolute right-1 top-[1.3rem]">
+        <SidebarTrigger className="absolute right-1 top-0">
           <PanelRightIcon size={24} />
         </SidebarTrigger>
         <Link href={"/"}>

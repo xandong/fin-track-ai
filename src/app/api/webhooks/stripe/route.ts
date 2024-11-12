@@ -29,7 +29,7 @@ export const POST = async (request: Request) => {
   const ClerkClient = await clerkClient()
 
   switch (event.type) {
-    case "invoice.paid":
+    case "invoice.paid": {
       // eslint-disable-next-line no-case-declarations
       const { customer, subscription, subscription_details } = event.data.object
       // eslint-disable-next-line no-case-declarations
@@ -61,7 +61,24 @@ export const POST = async (request: Request) => {
         return NextResponse.error()
       }
       break
+    }
 
+    case "customer.subscription.deleted": {
+      const subscription = await stripe.subscriptions.retrieve(
+        event.data.object.id
+      )
+      const clerkUserId = subscription.metadata.cleck_user_id
+      if (!clerkUserId) return NextResponse.error()
+
+      ClerkClient.users.updateUser(clerkUserId, {
+        privateMetadata: {
+          stripeCustomerId: null,
+          stripeSubscriptionId: null,
+          priceId: null
+        }
+      })
+      break
+    }
     default:
       console.log(`Unhandled event type ${event.type}`)
   }

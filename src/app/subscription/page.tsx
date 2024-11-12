@@ -8,7 +8,7 @@ import { getPricesIds } from "@/actions/getPricesIds"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/_ui/tabs"
 import { getSubscriptionPage } from "@/actions/getSubscriptionPage"
 import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
-import { CancelSubscription } from "./_components/cancelSubscription"
+import { ManageSubscription } from "./_components/manageSubscription"
 
 const Subscription = async () => {
   const { userId } = await auth()
@@ -103,7 +103,7 @@ const Subscription = async () => {
       <main className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold leading-8">Assinatura</h1>
-          {subscriptionPlan !== "free" ? <CancelSubscription /> : <div />}
+          {subscriptionPlan !== "free" ? <ManageSubscription /> : <div />}
         </div>
 
         <div className="flex flex-1">

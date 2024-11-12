@@ -15,7 +15,8 @@ export const getDashboardPage = async (year: string, month: string) => {
   const [transactions, categories] = await Promise.all([
     prisma.transaction.findMany({
       where: {
-        ...where
+        ...where,
+        userId: userId || ""
       },
       orderBy: {
         date: "desc"

@@ -23,9 +23,9 @@ const Reports = async () => {
 
   const currentSubscription = await getCurrentSubscription()
 
-  // if (currentSubscription === "free") {
-  //   redirect("/login")
-  // }
+  if (currentSubscription === "free") {
+    redirect("/")
+  }
 
   const transactions = await prisma.transaction.findMany({
     include: {
@@ -62,7 +62,7 @@ const Reports = async () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center">
-      <Navbar reportsAccess={currentSubscription !== "free"} />
+      <Navbar reportsAccess={true} />
 
       <div className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
         <div className="flex w-full items-center justify-between">

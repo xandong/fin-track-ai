@@ -75,7 +75,9 @@ export function TransactionsPieChart({
           <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel className="gap-2" />}
+              content={
+                <ChartTooltipContent indicator="dot" className="gap-2" />
+              }
             />
             <Pie
               data={chartData}
@@ -92,7 +94,7 @@ export function TransactionsPieChart({
         <div className="flex w-[80%] flex-col items-center gap-3">
           <PieDescriptionCard
             type="Receita"
-            percent={(depositsTotal * 100) / totalAmount}
+            percent={(depositsTotal * 100) / totalAmount || 0}
             icon={
               <div className="rounded-xl bg-tertiary/10 p-[.625rem] text-tertiary">
                 <TrendingUpIcon size={16} />
@@ -102,7 +104,7 @@ export function TransactionsPieChart({
 
           <PieDescriptionCard
             type="Despesas"
-            percent={(expensesTotal * 100) / totalAmount}
+            percent={(expensesTotal * 100) / totalAmount || 0}
             icon={
               <div className="rounded-xl bg-danger/10 p-[.625rem] text-danger">
                 <TrendingDownIcon size={16} />
@@ -112,7 +114,7 @@ export function TransactionsPieChart({
 
           <PieDescriptionCard
             type="Investimentos"
-            percent={(investmentsTotal * 100) / totalAmount}
+            percent={(investmentsTotal * 100) / totalAmount || 0}
             icon={
               <div className="rounded-xl bg-secondary/10 p-[.625rem] text-secondary">
                 <PiggyBankIcon size={16} />

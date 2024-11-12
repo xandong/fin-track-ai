@@ -67,10 +67,10 @@ export function TransactionsPieChart({
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0"></CardHeader>
-      <CardContent className="flex-1 pb-12">
+      <CardContent className="flex-1 pb-8">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[240px]"
         >
           <PieChart>
             <ChartTooltip

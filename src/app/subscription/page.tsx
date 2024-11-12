@@ -1,6 +1,6 @@
 "use server"
 
-import { Navbar } from "@/components/Navbar"
+import { Sidebar } from "@/components/Sidebar"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import CardSubscription from "./_components/cardSubscription"
@@ -10,6 +10,7 @@ import { getUserCountsPerMonth } from "@/actions/getUserCountsPerMonth"
 import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
 import { ManageSubscription } from "./_components/manageSubscription"
 import { DEFAULT_LIMITS } from "@/utils/constants/defaults"
+import { WrapperLayout } from "@/components/WrapperLayout"
 
 const Subscription = async () => {
   const { userId } = await auth()
@@ -98,10 +99,10 @@ const Subscription = async () => {
   ]
 
   return (
-    <div className="flex h-full w-full flex-col items-center">
-      <Navbar reportsAccess={subscriptionPlan !== "free"} />
+    <>
+      <Sidebar reportsAccess={subscriptionPlan !== "free"} />
 
-      <main className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
+      <WrapperLayout>
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold leading-8">Assinatura</h1>
           {subscriptionPlan !== "free" ? <ManageSubscription /> : <div />}
@@ -208,8 +209,8 @@ const Subscription = async () => {
             </div>
           </Tabs>
         </div>
-      </main>
-    </div>
+      </WrapperLayout>
+    </>
   )
 }
 

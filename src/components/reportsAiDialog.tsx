@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/_ui/scroll-area"
 import jsPDF from "jspdf"
 import { generateAiReport } from "@/app/(home)/_actons/genereteAiReport"
 import { marked } from "marked"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface ReportAiDialogProps {
   year: string
@@ -32,6 +33,7 @@ export const ReportAiDialog = ({
   trigger,
   initialReport = null
 }: ReportAiDialogProps) => {
+  const isMobile = useIsMobile()
   const [report, setReport] = useState<string | null>(initialReport)
   const [isLoading, setIsloading] = useState(false)
   const contentRef = useRef<HTMLDivElement | null>(null)
@@ -90,7 +92,7 @@ export const ReportAiDialog = ({
     <Dialog
       onOpenChange={(open) => {
         if (!open) {
-          setReport(null)
+          // setReport(null)
         }
       }}
     >
@@ -99,7 +101,7 @@ export const ReportAiDialog = ({
           trigger
         ) : (
           <Button variant={"outline"}>
-            Relatório IA
+            {!isMobile && "Relatório IA"}
             <BotIcon />
           </Button>
         )}
@@ -107,10 +109,12 @@ export const ReportAiDialog = ({
       <DialogContent className="w-max max-w-[95%]">
         <DialogHeader>
           <DialogTitle>Relatório IA</DialogTitle>
-          <DialogDescription>
-            Use Inteligência Artificial para gerar um relatório com insights
-            sobre suas finanças.
-          </DialogDescription>
+          {!initialReport && (
+            <DialogDescription>
+              Use Inteligência Artificial para gerar um relatório com insights
+              sobre suas finanças.
+            </DialogDescription>
+          )}
         </DialogHeader>
 
         <ScrollArea
@@ -127,7 +131,7 @@ export const ReportAiDialog = ({
           {!initialReport && (
             <Button
               className="w-[132px]"
-              disabled={isLoading || (!!report && !initialReport)}
+              disabled={isLoading}
               onClick={
                 initialReport
                   ? () => handleDownloadPdf()

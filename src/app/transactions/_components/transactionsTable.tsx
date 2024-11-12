@@ -18,7 +18,7 @@ type TransactionsTableProps = {
 export const TransactionsTable = ({
   transactions,
   categories,
-  itemsPerPage = 10,
+  itemsPerPage = 8,
   canAddCategory,
   canAddTransaction
 }: TransactionsTableProps) => {

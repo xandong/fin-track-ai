@@ -6,10 +6,11 @@ import { prisma } from "@/lib/prisma"
 
 import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
 import { TransactionsTable } from "./_components/transactionsTable"
-import { Navbar } from "@/components/Navbar"
+import { Sidebar } from "@/components/Sidebar"
 import { redirect } from "next/navigation"
 import { getUserCanAdd } from "@/actions/getUserCanAdd"
 import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
+import { WrapperLayout } from "@/components/WrapperLayout"
 
 const Transactions = async () => {
   const { userId } = await auth()
@@ -53,10 +54,9 @@ const Transactions = async () => {
   } = await getUserCanAdd()
 
   return (
-    <div className="flex h-full w-full flex-col items-center">
-      <Navbar reportsAccess={subscriptionPlan !== "free"} />
-
-      <div className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
+    <>
+      <Sidebar reportsAccess={subscriptionPlan !== "free"} />
+      <WrapperLayout>
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold leading-8">Transactions</h1>
 
@@ -74,10 +74,9 @@ const Transactions = async () => {
           canAddCategory={canAddCategory}
           categories={categories}
           transactions={JSON.parse(JSON.stringify(transactions))}
-          itemsPerPage={8}
         />
-      </div>
-    </div>
+      </WrapperLayout>
+    </>
   )
 }
 

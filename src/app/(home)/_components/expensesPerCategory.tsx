@@ -29,7 +29,7 @@ export const ExpensesPerCategory = ({
       <div className="h-[1px] w-[calc(100%-48px)] bg-white/10" />
 
       <ScrollArea className="w-full flex-1">
-        <CardContent className="flex h-full max-h-[378px] w-full flex-col gap-2 pb-4 pt-0">
+        <CardContent className="flex h-full max-h-[350px] w-full flex-col gap-2 pb-4 pt-0">
           {transactions.map((transaction) => {
             if (transaction.type !== "EXPENSE")
               return <div key={transaction.id} />

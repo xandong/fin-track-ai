@@ -1,13 +1,13 @@
 import { Meta, StoryObj } from "@storybook/react"
-import { Navbar } from "."
+import { Sidebar } from "."
 
 const meta: Meta = {
-  title: 'Navbar',
-  component: Navbar
+  title: "Sidebar",
+  component: Sidebar
 }
 
 export default meta
 
-type Story = StoryObj<typeof Navbar>
+type Story = StoryObj<typeof Sidebar>
 
 export const Default: Story = {}

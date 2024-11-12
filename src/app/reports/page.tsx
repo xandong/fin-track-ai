@@ -4,11 +4,12 @@ import { CategoryType } from "@prisma/client"
 import { auth } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/prisma"
 
-import { Navbar } from "@/components/Navbar"
+import { Sidebar } from "@/components/Sidebar"
 import { redirect } from "next/navigation"
 import { getUserCanAdd } from "@/actions/getUserCanAdd"
 import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
 import { ReportsTable } from "./_components/reportsTable"
+import { WrapperLayout } from "@/components/WrapperLayout"
 
 const Reports = async () => {
   const { userId } = await auth()
@@ -61,10 +62,9 @@ const Reports = async () => {
   })
 
   return (
-    <div className="flex h-full w-full flex-col items-center">
-      <Navbar reportsAccess={true} />
-
-      <div className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
+    <>
+      <Sidebar reportsAccess={true} />
+      <WrapperLayout>
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold leading-8">Relatórios com IA</h1>
 
@@ -77,8 +77,8 @@ const Reports = async () => {
           categories={JSON.parse(JSON.stringify(categories))}
           transactions={JSON.parse(JSON.stringify(transactions))}
         />
-      </div>
-    </div>
+      </WrapperLayout>
+    </>
   )
 }
 

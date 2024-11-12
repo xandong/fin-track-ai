@@ -64,11 +64,11 @@ export const generateAiReport = async ({
 
   // ChatGPT
 
-  const content = `Gere um relatório com insights sobre as minhas finanças, com dicas e orientações de como melhorar minha vida financeira. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{TIPO}-{VALOR}-{CATEGORIA-ID}-{CATEGORIA}. São elas:
+  const content = `Gere um relatório com insights sobre as minhas finanças. Forneça uma análise com dicas e orientações de como melhorar minha vida financeira. Inicie sempre com um titulo padrão {"Relatório dd/mm/yyy"}. Nas despesas adicione sobre o que foram, um resumo bem construido e formatado. Se achar necessário uma conclusão, tudo bem. Mas ao final, não interaja. Você irá gerar um relatório para uma aplicação de controle de gastos, então não recomende isso como uma dica, pois será redundante. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{VALOR}-{TIPO}-{METODO_PAGAMENTO}-{CATEGORIA_DE_GASTO}. São elas:
   ${transactions
     .map(
       (transaction) =>
-        `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${transaction.categoryId}-${transaction.category}`
+        `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.paymentMethod}-${transaction.type}-${transaction.category?.name}`
     )
     .join(";")}`
   const completion = await openAi.chat.completions.create({

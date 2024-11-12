@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import { ScrollArea } from "@/components/_ui/scroll-area"
 import { SubscriptionProvider } from "@/context/SubscriptionContext"
+import { SidebarProvider, SidebarTrigger } from "@/components/_ui/sidebar"
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -34,7 +35,12 @@ export default function RootLayout({
         <link rel="icon" href="/logo.svg" />
         <body className={`${mulish.className} dark antialiased`}>
           <SubscriptionProvider>
-            <ScrollArea className="h-screen w-screen">{children}</ScrollArea>
+            <ScrollArea className="w-hull h-full">
+              <SidebarProvider>
+                <SidebarTrigger />
+                {children}
+              </SidebarProvider>
+            </ScrollArea>
           </SubscriptionProvider>
         </body>
       </html>

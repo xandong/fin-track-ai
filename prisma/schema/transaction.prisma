@@ -4,6 +4,7 @@ model Transaction {
   amount        Decimal                  @db.Money
   date          DateTime
   categoryId    Int?
+  userId String
   type          TransactionType
   paymentMethod TransactionPaymentMethod
 

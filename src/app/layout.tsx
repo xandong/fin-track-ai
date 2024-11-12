@@ -2,14 +2,15 @@ import type { Metadata } from "next"
 import { Mulish } from "next/font/google"
 
 import "@/styles/global.css"
-import {
-  ClerkProvider,
-} from "@clerk/nextjs"
+import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
+import { ScrollArea } from "@/components/_ui/scroll-area"
+import { SubscriptionProvider } from "@/context/SubscriptionContext"
+import { SidebarProvider, SidebarTrigger } from "@/components/_ui/sidebar"
 
 const mulish = Mulish({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "600", "500", "700", "800"],
   display: "swap"
 })
 
@@ -31,8 +32,16 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
+        <link rel="icon" href="/logo.svg" />
         <body className={`${mulish.className} dark antialiased`}>
-          {children}
+          <SubscriptionProvider>
+            <ScrollArea className="w-hull h-full">
+              <SidebarProvider>
+                <SidebarTrigger size={"default"} />
+                {children}
+              </SidebarProvider>
+            </ScrollArea>
+          </SubscriptionProvider>
         </body>
       </html>
     </ClerkProvider>

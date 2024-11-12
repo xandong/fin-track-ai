@@ -1,0 +1,12 @@
+model Report {
+  id             String   @id @default(cuid())
+  userId         String
+  report         String
+  transactionsId String[]
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@map("reports")
+  @@schema("transactional")
+}

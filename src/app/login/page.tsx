@@ -17,7 +17,7 @@ const LoginPage = async () => {
       <div className="flex items-center justify-center py-[4rem]">
         <div className="flex h-full w-[488px] max-w-full flex-col justify-center gap-8">
           <Image
-            src="/logo.svg"
+            src="/logo-full.png"
             alt="Fin Track AI"
             width={173.57}
             height={39}

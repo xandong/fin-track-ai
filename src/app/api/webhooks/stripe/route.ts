@@ -14,40 +14,56 @@ export const POST = async (request: Request) => {
     apiVersion: "2024-10-28.acacia"
   })
 
-  const event = stripe.webhooks.constructEvent(
-    text,
-    signature,
-    process.env.STRIPE_WEBHOOK_SECRET
-  )
+  let event: Stripe.Event
+  try {
+    event = stripe.webhooks.constructEvent(
+      text,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    )
+  } catch (error) {
+    console.error("Error when verify the signature of webhook", { error })
+    return NextResponse.error()
+  }
+
+  const ClerkClient = await clerkClient()
 
   switch (event.type) {
     case "invoice.paid":
-      console.log({ type: event.type, event: event.data.object })
       // eslint-disable-next-line no-case-declarations
-      const { customer, subscription, subscription_details, object } =
-        event.data.object
+      const { customer, subscription, subscription_details } = event.data.object
       // eslint-disable-next-line no-case-declarations
       const clerkUserId = subscription_details?.metadata?.cleck_user_id
+      // eslint-disable-next-line no-case-declarations
+      const priceId = subscription_details?.metadata?.price_id
 
       if (!clerkUserId) return NextResponse.error()
       // Atualiza o usuário com o novo plano
       // eslint-disable-next-line no-case-declarations
       // eslint-disable-next-line no-case-declarations
 
-      console.log({ customer, subscription, subscription_details, object })
-      ;(await clerkClient()).users.updateUser(clerkUserId, {
-        privateMetadata: {
-          stripeCustomerId: customer,
-          stripeSubscriptionId: subscription
-        },
-        publicMetadata: {
-          subscriptionPlan: subscription_details?.metadata?.id
-        }
+      console.log({
+        customer,
+        subscription,
+        subscription_details
       })
+
+      try {
+        ClerkClient.users.updateUser(clerkUserId, {
+          privateMetadata: {
+            stripeCustomerId: customer,
+            stripeSubscriptionId: subscription,
+            priceId: priceId
+          }
+        })
+      } catch (error) {
+        console.error("Erro when update clerk user: ", error)
+        return NextResponse.error()
+      }
       break
 
     default:
-      break
+      console.log(`Unhandled event type ${event.type}`)
   }
 
   return NextResponse.json({ received: true })

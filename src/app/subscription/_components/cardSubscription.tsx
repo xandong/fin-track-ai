@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo } from "react"
+import { useMemo } from "react"
 import { Badge } from "@/components/_ui/badge"
 import { Button } from "@/components/_ui/button"
 import {
@@ -13,7 +13,6 @@ import { Separator } from "@/components/_ui/separator"
 import { CheckIcon, XIcon } from "lucide-react"
 import { createSripeCheckout } from "@/actions/createStripeCheckout"
 import { loadStripe } from "@stripe/stripe-js"
-import { useRouter } from "next/navigation"
 
 interface CardSubscriptionProps {
   priceId?: string
@@ -32,39 +31,33 @@ const CardSubscription = ({
   diffYear,
   current
 }: CardSubscriptionProps) => {
-  const router = useRouter()
   const formattedPrice = useMemo(() => {
     if (price === 0) return "0"
     return price.toFixed(2).toString().replaceAll(".", ",")
   }, [price])
 
-  const handleAcquirePlanClick = useCallback(async () => {
+  const handleAcquirePlanClick = async () => {
     if (!priceId) return
-    console.log({ priceId })
-    const { sessionId, url } = await createSripeCheckout(priceId)
-    console.log({ sessionId })
 
-    if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+    const { sessionId } = await createSripeCheckout(priceId)
+
+    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
       throw new Error("Stripe publishable key not found")
     }
 
     const stripe = await loadStripe(
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
     )
 
     if (!stripe) {
       throw new Error("Stripe not found")
     }
 
-    if (url) {
-      router.push(url)
-    }
-
     await stripe.redirectToCheckout({ sessionId })
-  }, [priceId, router])
+  }
 
   return (
-    <Card className="h-fit w-[25rem] max-w-full">
+    <Card className={`h-fit w-[25rem] max-w-full ${current && "bg-zinc-900"}`}>
       <CardHeader className="p-0">
         <div className="relative flex flex-col items-center gap-4 px-6 py-10">
           {diffYear && (
@@ -110,15 +103,21 @@ const CardSubscription = ({
           </div>
         ))}
       </CardContent>
-      <CardFooter className="p-10 pt-8">
-        <Button
-          className="w-full"
-          variant={current ? "secondary" : "default"}
-          disabled={current}
-          onClick={handleAcquirePlanClick}
-        >
-          {current ? "Plano Atual" : "Alterar plano"}
-        </Button>
+      <CardFooter className="flex justify-end p-10 pt-8">
+        {current ? (
+          <Button
+            className="w-full border-2 border-primary bg-zinc-900 text-secondary"
+            variant={"outline"}
+            disabled
+            onClick={() => {}}
+          >
+            Plano atual
+          </Button>
+        ) : (
+          <Button className="w-full" onClick={handleAcquirePlanClick}>
+            Alterar plano
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )

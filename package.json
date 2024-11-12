@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "stripe:local": "stripe listen --forward-to http://localhost:3380/api/webhooks/stripe",
     "dev": "next dev --port ${NEXT_DEV_PORT}",
     "build": "next build",
     "test": "jest --passWithNoTests --maxWorkers=50%",

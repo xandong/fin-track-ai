@@ -35,11 +35,11 @@ export function TransactionsPieChart({
       color: "hsla(102, 59%, 44%, 0.9)"
     },
     [TransactionType.EXPENSE]: {
-      label: "Despesas",
+      label: "Gastos",
       color: "	hsla(0, 81%, 55%, 0.9)"
     },
     [TransactionType.INVESTMENT]: {
-      label: "Investimento",
+      label: "Investido",
       color: "hsla(284, 42%, 49%, 0.9)"
     }
   } satisfies ChartConfig
@@ -79,6 +79,7 @@ export function TransactionsPieChart({
             />
             <Pie
               data={chartData}
+              format={"sim"}
               dataKey="total"
               nameKey="type"
               innerRadius={70}

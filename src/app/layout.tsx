@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 import { Mulish } from "next/font/google"
 
 import "@/styles/global.css"
-import {
-  ClerkProvider,
-} from "@clerk/nextjs"
+import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
+import { ScrollArea } from "@/components/_ui/scroll-area"
+import { SubscriptionProvider } from "@/context/SubscriptionContext"
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -33,7 +33,9 @@ export default function RootLayout({
       <html lang="en">
         <link rel="icon" href="/logo.svg" />
         <body className={`${mulish.className} dark antialiased`}>
-          {children}
+          <SubscriptionProvider>
+            <ScrollArea className="h-screen w-screen">{children}</ScrollArea>
+          </SubscriptionProvider>
         </body>
       </html>
     </ClerkProvider>

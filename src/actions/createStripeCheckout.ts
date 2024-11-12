@@ -30,11 +30,11 @@ export const createSripeCheckout = async (priceId: string) => {
     ],
     subscription_data: {
       metadata: {
-        cleck_user_id: userId
+        cleck_user_id: userId,
+        price_id: priceId
       }
     }
   })
 
-  console.log({ session })
-  return { sessionId: session.id, url: session.url }
+  return { sessionId: session.id }
 }

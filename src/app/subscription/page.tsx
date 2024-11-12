@@ -7,6 +7,8 @@ import CardSubscription from "./_components/cardSubscription"
 import { getPricesIds } from "@/actions/getPricesIds"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/_ui/tabs"
 import { getSubscriptionPage } from "@/actions/getSubscriptionPage"
+import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
+import { CancelSubscription } from "./_components/cancelSubscription"
 
 const Subscription = async () => {
   const { userId } = await auth()
@@ -21,6 +23,7 @@ const Subscription = async () => {
   const {
     prices: { advanced, premium }
   } = await getPricesIds()
+  const subscriptionPlan = await getCurrentSubscription()
 
   const standardList: { has: boolean; label: string }[] = [
     {
@@ -100,12 +103,14 @@ const Subscription = async () => {
       <main className="flex w-full max-w-[90rem] flex-1 flex-col gap-6 p-6">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold leading-8">Assinatura</h1>
-          <div />
+          {subscriptionPlan !== "free" ? <CancelSubscription /> : <div />}
         </div>
 
         <div className="flex flex-1">
           <Tabs
-            defaultValue="monthly"
+            defaultValue={
+              subscriptionPlan.includes("yearly") ? "annually" : "monthly"
+            }
             className="flex flex-1 flex-col items-center"
           >
             <TabsList className="grid w-[400px] grid-cols-2">
@@ -123,7 +128,7 @@ const Subscription = async () => {
                   key={"free-monthly"}
                   priceId={undefined}
                   title={"Plano Standard"}
-                  current
+                  current={subscriptionPlan === "free"}
                   price={0}
                   list={standardList}
                 />
@@ -132,6 +137,7 @@ const Subscription = async () => {
                   <CardSubscription
                     key={advanced.monthly.priceId}
                     priceId={advanced.monthly.priceId}
+                    current={subscriptionPlan === "advanced-monthly"}
                     title={advanced.monthly.title}
                     price={advanced.monthly.price}
                     list={advancedList}
@@ -142,6 +148,7 @@ const Subscription = async () => {
                   <CardSubscription
                     key={premium.monthly.priceId}
                     priceId={premium.monthly.priceId}
+                    current={subscriptionPlan === "premium-monthly"}
                     title={premium.monthly.title}
                     price={premium.monthly.price}
                     list={premiumList}
@@ -157,9 +164,9 @@ const Subscription = async () => {
                 <CardSubscription
                   key={"free-annually"}
                   priceId={undefined}
+                  current={subscriptionPlan === "free"}
                   title={"Plano Standard"}
                   price={0}
-                  current
                   list={standardList}
                 />
 
@@ -173,6 +180,7 @@ const Subscription = async () => {
                     }
                     key={advanced.annually.priceId}
                     priceId={advanced.annually.priceId}
+                    current={subscriptionPlan === "advanced-yearly"}
                     title={advanced.annually.title}
                     price={advanced.annually.price}
                     list={advancedList}
@@ -189,6 +197,7 @@ const Subscription = async () => {
                     }
                     key={premium.annually.priceId}
                     priceId={premium.annually.priceId}
+                    current={subscriptionPlan === "premium-yearly"}
                     title={premium.annually.title}
                     price={premium.annually.price}
                     list={premiumList}

@@ -34,10 +34,13 @@ export const POST = async (request: Request) => {
       // eslint-disable-next-line no-case-declarations
       const { customer, subscription, subscription_details } = event.data.object
       // eslint-disable-next-line no-case-declarations
-      const clerkUserId = subscription_details?.metadata?.cleck_user_id
+      // const clerkUserId = subscription_details?.metadata?.clerk_user_id
+      const clerkUserId = process.env.USER_TEST_ID || "userId"
+
       // eslint-disable-next-line no-case-declarations
       const priceId = subscription_details?.metadata?.price_id
 
+      console.log({ clerkUserId })
       if (!clerkUserId) return NextResponse.error()
       // Atualiza o usuário com o novo plano
       // eslint-disable-next-line no-case-declarations
@@ -70,7 +73,7 @@ export const POST = async (request: Request) => {
       const subscription = await stripe.subscriptions.retrieve(
         event.data.object.id
       )
-      const clerkUserId = subscription.metadata.cleck_user_id
+      const clerkUserId = subscription.metadata.clerk_user_id
       if (!clerkUserId) return NextResponse.error()
 
       ClerkClient.users.updateUser(clerkUserId, {

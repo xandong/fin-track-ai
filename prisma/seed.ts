@@ -8,21 +8,25 @@ const main = async () => {
     const categories = await prisma.transactionCategory.findMany({
       where: {
         type: CategoryType.PUBLIC
-      }
+      },
+      select: { name: true }
     })
+
+    const existingCategoryNames = categories.map((category) => category.name)
 
     const uniqueCategories = DEFAULT_CATEGORIES.filter(
-      (defaultCategory) =>
-        !!categories.find((category) => !(category.name === defaultCategory))
+      (defaultCategory) => !existingCategoryNames.includes(defaultCategory)
     )
 
-    await prisma.transactionCategory.createMany({
-      data: uniqueCategories.map((category) => ({
-        name: category,
-        type: CategoryType.PUBLIC
-      })),
-      skipDuplicates: true
-    })
+    if (uniqueCategories.length > 0) {
+      await prisma.transactionCategory.createMany({
+        data: uniqueCategories.map((category) => ({
+          name: category,
+          type: CategoryType.PUBLIC
+        })),
+        skipDuplicates: true
+      })
+    }
   } catch (error) {
     console.error("[SEED]: ", { error })
   } finally {

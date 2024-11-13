@@ -88,10 +88,10 @@ const Subscription = async () => {
       has: true,
       label: "Salve e Organize seus Relatórios para Acessos Futuros"
     },
-    {
-      has: true,
-      label: "Exporte seus Relatórios em PDF para Analisar Quando Quiser"
-    },
+    // {
+    //   has: true,
+    //   label: "Exporte seus Relatórios em PDF para Analisar Quando Quiser"
+    // },
     {
       has: true,
       label: "Suporte Prioritário 24/7"

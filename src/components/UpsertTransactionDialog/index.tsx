@@ -1,7 +1,12 @@
 "use client"
 
 import React, { useCallback, useEffect, useState } from "react"
-import { ArrowDownUpIcon, CalendarIcon } from "lucide-react"
+import {
+  ArrowDownUpIcon,
+  CalendarIcon,
+  CheckIcon,
+  ChevronsUpDown
+} from "lucide-react"
 import {
   $Enums,
   TransactionCategory,
@@ -53,11 +58,13 @@ import { TransactionCategoryDisplay } from "../TransactionCategoryDisplay"
 import { upsertTransaction } from "@/actions/upsertTransaction"
 import { AddTransactionCategory } from "../AddTransactionCategory"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "../_ui/tooltip"
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from "../_ui/command"
 
 const formSchema = z.object({
   name: z
@@ -107,6 +114,8 @@ export const UpsertTransactionDialog = ({
   canAddCategory,
   canAddTransaction
 }: UpsertTransactionDialogProps) => {
+  const [openCategorySelect, setOpenCategorySelect] = React.useState(false)
+  const [categorySearch, setCategorySearch] = React.useState("")
   const [isOpen, setIsOpen] = useState(false)
   const otherCategory = categories.find((category) => category.name == "OTHER")
   const [categoryId, setCategoryId] = useState<string>(
@@ -199,6 +208,7 @@ export const UpsertTransactionDialog = ({
         setIsOpen(open)
         if (!open) {
           setCategoryId("")
+
           form.reset(
             defaultValues
               ? { ...defaultValues, date: new Date(defaultValues?.date) }
@@ -308,62 +318,98 @@ export const UpsertTransactionDialog = ({
               )}
             />
 
-            <FormItem>
-              <FormLabel>Categoria</FormLabel>
-              <FormControl>
-                <Select
-                  value={categoryId}
-                  onValueChange={(e) => {
-                    if (e === categoryId) return
-                    setCategoryId(e)
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione uma categoria" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {otherCategory && (
-                      <SelectItem
-                        key={otherCategory.id}
-                        value={otherCategory.id.toString()}
-                      >
-                        <TransactionCategoryDisplay category={otherCategory} />
-                      </SelectItem>
-                    )}
-
-                    {categories.map((option) => {
-                      if (option.name === "OTHER") return null
-
-                      return (
-                        <SelectItem
-                          key={option.id}
-                          value={option.id.toString()}
-                        >
-                          <TransactionCategoryDisplay category={option} />
-                        </SelectItem>
-                      )
-                    })}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-
-            <TooltipProvider disableHoverableContent={false}>
-              <Tooltip disableHoverableContent={false}>
-                <TooltipTrigger asChild>
-                  <AddTransactionCategory
-                    categories={categories}
-                    disabled={!canAddCategory}
-                    handleNewCategory={handleAddNewCategory}
+            <Popover
+              open={openCategorySelect}
+              onOpenChange={setOpenCategorySelect}
+            >
+              <div>
+                <p className="mb-2 text-sm">Selecione uma categoria</p>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openCategorySelect}
+                    className="w-full justify-between"
+                  >
+                    {categoryId
+                      ? TransactionCategoryDisplay({
+                          category: {
+                            name:
+                              categories.find(
+                                (category) => String(category.id) === categoryId
+                              )?.name || "Nenhum"
+                          }
+                        })
+                      : "Selecione uma Categoria..."}
+                    <ChevronsUpDown className="opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+              </div>
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput
+                    placeholder="Pesquisar categoria..."
+                    value={categorySearch}
+                    onValueChange={(value) => setCategorySearch(value)}
                   />
-                </TooltipTrigger>
-                <TooltipContent>
-                  {!canAddCategory &&
-                    "Você atingiu o limite de Categorias Personalizadas. Um upgrade de plano permitirá criar mais."}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                  <CommandList className="w-full">
+                    <CommandEmpty>
+                      <p className="pb-2">Categoria não encontrada</p>
+                      <AddTransactionCategory
+                        defaultValue={categorySearch}
+                        categories={categories}
+                        disabled={!canAddCategory}
+                        handleNewCategory={handleAddNewCategory}
+                      />
+                    </CommandEmpty>
+                    <CommandGroup>
+                      {categories.map((category) => (
+                        <CommandItem
+                          key={String(category.id)}
+                          value={TransactionCategoryDisplay({ category })}
+                          onSelect={(currentValue: string) => {
+                            setCategoryId(() => {
+                              const categoryMatchId = categories.find(
+                                (el) =>
+                                  TransactionCategoryDisplay({
+                                    category: el
+                                  }) === currentValue
+                              )
+
+                              return categoryMatchId &&
+                                String(categoryMatchId) !== categoryId
+                                ? String(categoryMatchId.id)
+                                : ""
+                            })
+                            setOpenCategorySelect(false)
+                          }}
+                        >
+                          {TransactionCategoryDisplay({
+                            category: {
+                              name: category.name
+                            }
+                          })}
+                          <CheckIcon
+                            className={cn(
+                              "ml-auto",
+                              categoryId === String(category.id)
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+
+            <AddTransactionCategory
+              categories={categories}
+              disabled={!canAddCategory}
+              handleNewCategory={handleAddNewCategory}
+            />
 
             <FormField
               control={form.control}

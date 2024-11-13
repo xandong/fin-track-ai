@@ -9,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ScrollArea } from "@/components/_ui/scroll-area"
 import { SubscriptionProvider } from "@/context/SubscriptionContext"
 import { SidebarProvider, SidebarTrigger } from "@/components/_ui/sidebar"
+import { ToastProvider } from "@/components/_ui/toast"
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -36,15 +37,17 @@ export default function RootLayout({
       <html lang="en">
         <link rel="icon" href="/logo.svg" />
         <body className={`${mulish.className} dark antialiased`}>
-          <SubscriptionProvider>
+          <ToastProvider>
             <ScrollArea className="w-hull h-full">
-              <SidebarProvider>
-                <SidebarTrigger size={"default"} />
-                {children}
-                <SpeedInsights />
-              </SidebarProvider>
+              <SubscriptionProvider>
+                <SidebarProvider>
+                  <SidebarTrigger size={"default"} />
+                  {children}
+                  <SpeedInsights />
+                </SidebarProvider>
+              </SubscriptionProvider>
             </ScrollArea>
-          </SubscriptionProvider>
+          </ToastProvider>
         </body>
       </html>
     </ClerkProvider>

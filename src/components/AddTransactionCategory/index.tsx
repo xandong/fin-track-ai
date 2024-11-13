@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { DollarSign } from "lucide-react"
-import { $Enums, CategoryType, TransactionCategory } from "@prisma/client"
+import { PlusIcon } from "lucide-react"
+import { CategoryType, TransactionCategory } from "@prisma/client"
 
 import { Button } from "../_ui/button"
 import {
@@ -23,24 +23,19 @@ import { formatTransactionCategory } from "@/utils/formatter"
 interface AddTransactionCategoryProps {
   categories: TransactionCategory[]
   disabled?: boolean
+  defaultValue?: string
   // eslint-disable-next-line no-unused-vars
-  handleNewCategory: (category: {
-    name: string
-    id: number
-    userId: string | null
-    type: $Enums.CategoryType
-    createdAt: Date
-    updateAt: Date
-  }) => void
+  handleNewCategory: (category: TransactionCategory) => void
 }
 
 export const AddTransactionCategory = ({
   categories,
+  defaultValue,
   disabled,
   handleNewCategory
 }: AddTransactionCategoryProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [newCategoryName, setNewCategoryName] = useState("")
+  const [newCategoryName, setNewCategoryName] = useState(defaultValue || "")
   const [newCategoryNameError, setNewCategoryNameError] = useState<
     string | null
   >(null)
@@ -100,9 +95,12 @@ export const AddTransactionCategory = ({
       }}
     >
       <DialogTrigger asChild className="w-full" disabled={disabled}>
-        <Button className="w-full rounded-full" variant="outline">
-          Adicionar novo Gasto
-          <DollarSign />
+        <Button
+          className="w-full rounded-full"
+          variant={defaultValue ? "ghost" : "outline"}
+        >
+          Adicionar nova Categoria
+          <PlusIcon />
         </Button>
       </DialogTrigger>
 
@@ -110,7 +108,7 @@ export const AddTransactionCategory = ({
         <DialogHeader>
           <DialogTitle>Adicionar Categoria</DialogTitle>
           <DialogDescription>
-            Insira uma categoria de gasto personalizada
+            Insira uma categoria personalizada
           </DialogDescription>
         </DialogHeader>
 

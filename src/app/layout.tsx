@@ -1,9 +1,11 @@
+import "@/styles/global.css"
+
 import type { Metadata } from "next"
 import { Mulish } from "next/font/google"
-
-import "@/styles/global.css"
 import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 import { ScrollArea } from "@/components/_ui/scroll-area"
 import { SubscriptionProvider } from "@/context/SubscriptionContext"
 import { SidebarProvider, SidebarTrigger } from "@/components/_ui/sidebar"
@@ -39,6 +41,7 @@ export default function RootLayout({
               <SidebarProvider>
                 <SidebarTrigger size={"default"} />
                 {children}
+                <SpeedInsights />
               </SidebarProvider>
             </ScrollArea>
           </SubscriptionProvider>

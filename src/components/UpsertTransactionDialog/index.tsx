@@ -441,19 +441,12 @@ export const UpsertTransactionDialog = ({
                   Cancelar
                 </Button>
               </DialogClose>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button type="submit">
-                      {defaultValues ? "Salvar" : "Adicionar"}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {!canAddTransaction &&
-                      "Você atingiu o limite de transações. Um upgrade de plano permitirá mais transações."}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Button
+                type="submit"
+                disabled={!defaultValues && !canAddTransaction}
+              >
+                {defaultValues ? "Salvar" : "Adicionar"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

@@ -19,10 +19,17 @@ import { usePathname } from "next/navigation"
 import { SIDEBAR_LIST } from "./Sidebar"
 import Link from "next/link"
 import { useSidebar } from "./_ui/sidebar"
+import { useEffect } from "react"
 
 export function Breadcrumb() {
   const pathname = usePathname()
-  const { isMobile, open } = useSidebar()
+  const { isMobile, open, setOpen } = useSidebar()
+
+  useEffect(() => {
+    if (pathname === "/subscription") {
+      setOpen(false)
+    }
+  }, [pathname, setOpen])
 
   if (!isMobile && open) return <div />
 

@@ -30,7 +30,7 @@ const Subscription = async () => {
   const standardList: { has: boolean; label: string }[] = [
     {
       has: true,
-      label: `Apenas ${DEFAULT_LIMITS.free.transactions} transações por dia (${transactionsCount}/${DEFAULT_LIMITS.free.transactions})`
+      label: `Crie ${DEFAULT_LIMITS.free.transactions} transações por mês (${transactionsCount}/${DEFAULT_LIMITS.free.transactions})`
     },
     {
       has: true,
@@ -52,7 +52,7 @@ const Subscription = async () => {
   const advancedList: { has: boolean; label: string }[] = [
     {
       has: true,
-      label: `Apenas ${DEFAULT_LIMITS.advanced.transactions} transações por dia (${transactionsCount}/${DEFAULT_LIMITS.advanced.transactions})`
+      label: `Crie ${DEFAULT_LIMITS.advanced.transactions} transações por mês (${transactionsCount}/${DEFAULT_LIMITS.advanced.transactions})`
     },
     {
       has: true,
@@ -82,7 +82,7 @@ const Subscription = async () => {
     },
     {
       has: true,
-      label: "Gere Relatórios Avançados com IA"
+      label: "Gere Relatórios Avançados Ilimitados com IA"
     },
     {
       has: true,

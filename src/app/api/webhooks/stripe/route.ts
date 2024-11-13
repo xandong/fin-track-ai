@@ -27,10 +27,10 @@ export const POST = async (request: Request) => {
     return NextResponse.error()
   }
 
-  const ClerkClient = await clerkClient()
-
   switch (event.type) {
     case "invoice.paid": {
+      const ClerkClient = await clerkClient()
+
       // eslint-disable-next-line no-case-declarations
       const { customer, subscription, subscription_details } = event.data.object
       // eslint-disable-next-line no-case-declarations
@@ -69,9 +69,12 @@ export const POST = async (request: Request) => {
     }
 
     case "customer.subscription.deleted": {
+      const ClerkClient = await clerkClient()
+
       const subscription = await stripe.subscriptions.retrieve(
         event.data.object.id
       )
+
       const clerkUserId = subscription.metadata.clerk_user_id
       if (!clerkUserId) return NextResponse.error()
 

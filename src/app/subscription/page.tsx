@@ -46,7 +46,7 @@ const Subscription = async () => {
     },
     {
       has: false,
-      label: "Crie Categorias de gasto ilimitadas"
+      label: "Crie Categorias ilimitadas"
     }
   ]
   const advancedList: { has: boolean; label: string }[] = [
@@ -68,7 +68,7 @@ const Subscription = async () => {
     },
     {
       has: false,
-      label: "Crie Categorias de gasto ilimitadas"
+      label: "Crie Categorias ilimitadas"
     }
   ]
   const premiumList: { has: boolean; label: string }[] = [
@@ -78,7 +78,7 @@ const Subscription = async () => {
     },
     {
       has: true,
-      label: `Crie Categorias de Gastos Ilimitadas 100% Personalizadas`
+      label: `Crie Categorias Ilimitadas 100% Personalizadas`
     },
     {
       has: true,

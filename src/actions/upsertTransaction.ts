@@ -48,6 +48,7 @@ export const upsertTransaction = async (params: upsertTransactionParams) => {
       create: { ...data, userId }
     })
     revalidatePath("/transactions")
+    revalidatePath("/")
   } catch (error) {
     console.error("[upsertTransaction]:", { error })
     throw new Error("Error when create new transaction")

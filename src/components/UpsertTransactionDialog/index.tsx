@@ -127,8 +127,6 @@ export const UpsertTransactionDialog = ({
         }
   })
 
-  const type = form.watch("type")
-
   const onSubmit = useCallback(
     async (data: z.infer<typeof formSchema>) => {
       if (
@@ -310,69 +308,62 @@ export const UpsertTransactionDialog = ({
               )}
             />
 
-            {type === "EXPENSE" && (
-              <FormItem>
-                <FormLabel>Valor gasto em</FormLabel>
-                <FormControl>
-                  <Select
-                    value={categoryId}
-                    onValueChange={(e) => {
-                      if (e === categoryId) return
-                      setCategoryId(e)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione uma categoria" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {otherCategory && (
+            <FormItem>
+              <FormLabel>Categoria</FormLabel>
+              <FormControl>
+                <Select
+                  value={categoryId}
+                  onValueChange={(e) => {
+                    if (e === categoryId) return
+                    setCategoryId(e)
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione uma categoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {otherCategory && (
+                      <SelectItem
+                        key={otherCategory.id}
+                        value={otherCategory.id.toString()}
+                      >
+                        <TransactionCategoryDisplay category={otherCategory} />
+                      </SelectItem>
+                    )}
+
+                    {categories.map((option) => {
+                      if (option.name === "OTHER") return null
+
+                      return (
                         <SelectItem
-                          key={otherCategory.id}
-                          value={otherCategory.id.toString()}
+                          key={option.id}
+                          value={option.id.toString()}
                         >
-                          <TransactionCategoryDisplay
-                            category={otherCategory}
-                          />
+                          <TransactionCategoryDisplay category={option} />
                         </SelectItem>
-                      )}
+                      )
+                    })}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
 
-                      {categories.map((option) => {
-                        if (option.name === "OTHER") return null
-
-                        return (
-                          <SelectItem
-                            key={option.id}
-                            value={option.id.toString()}
-                          >
-                            <TransactionCategoryDisplay category={option} />
-                          </SelectItem>
-                        )
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-
-            {type === "EXPENSE" && (
-              // otherCategory?.id.toString() === categoryId &&
-              <TooltipProvider disableHoverableContent={false}>
-                <Tooltip disableHoverableContent={false}>
-                  <TooltipTrigger asChild>
-                    <AddTransactionCategory
-                      categories={categories}
-                      disabled={!canAddCategory}
-                      handleNewCategory={handleAddNewCategory}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {!canAddCategory &&
-                      "Você atingiu o limite de Categorias Personalizadas. Um upgrade de plano permitirá criar mais."}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
+            <TooltipProvider disableHoverableContent={false}>
+              <Tooltip disableHoverableContent={false}>
+                <TooltipTrigger asChild>
+                  <AddTransactionCategory
+                    categories={categories}
+                    disabled={!canAddCategory}
+                    handleNewCategory={handleAddNewCategory}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  {!canAddCategory &&
+                    "Você atingiu o limite de Categorias Personalizadas. Um upgrade de plano permitirá criar mais."}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             <FormField
               control={form.control}

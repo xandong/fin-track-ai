@@ -13,7 +13,8 @@ export const deleteTransaction = async ({ id }: { id: string }) => {
       }
     })
 
-    revalidatePath("transactions")
+    revalidatePath("/transactions")
+    revalidatePath("/")
   } catch (error) {
     console.error("[deleteTransaction]: ", { error })
     throw new Error("Error when deleting transaction")

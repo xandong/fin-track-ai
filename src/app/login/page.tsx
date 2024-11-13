@@ -27,9 +27,10 @@ const LoginPage = async () => {
             <h1 className="text-4xl font-bold">Bem-vindo</h1>
 
             <p className="text-muted-foreground">
-              A Finance AI é uma plataforma de gestão financeira que utiliza IA
-              para monitorar suas movimentações, e oferecer insights
-              personalizados, facilitando o controle do seu orçamento.
+              A Fintrack AI é uma plataforma de gestão financeira e controle de
+              gastos, impulsionada por inteligência artificial, que monitora
+              suas movimentações e oferece insights personalizados, tornando o
+              controle do seu orçamento mais fácil e eficiente.
             </p>
           </div>
 

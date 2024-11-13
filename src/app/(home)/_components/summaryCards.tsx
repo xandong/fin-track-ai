@@ -6,23 +6,24 @@ import {
   WalletIcon
 } from "lucide-react"
 
-import SumaryCard from "./sumaryCard"
-import { TransactionsPieChart } from "./transactiosPieChart"
-import { ExpensesPerCategory } from "./expensesPerCategory"
+import SummaryCard from "./summaryCard"
 
-interface SumaryCardsProps {
+import { ExpensesPerCategory } from "./expensesPerCategory"
+import { TransactionsPieChart } from "./transactionsPieChart"
+
+interface SummaryCardsProps {
   transactions: Transaction[]
   categories: TransactionCategory[]
   canAddTransaction?: boolean
   canAddCategory?: boolean
 }
 
-const SumaryCards = async ({
+const SummaryCards = async ({
   categories,
   transactions,
   canAddTransaction,
   canAddCategory
-}: SumaryCardsProps) => {
+}: SummaryCardsProps) => {
   const { depositsTotal, investmentsTotal, expensesTotal } =
     transactions.reduce(
       (totals, transaction) => {
@@ -47,7 +48,7 @@ const SumaryCards = async ({
   return (
     <div className="grid h-full grid-cols-10 grid-rows-4 gap-x-4 gap-y-4 sm:grid-rows-5">
       <div className="col-span-10 row-span-1">
-        <SumaryCard
+        <SummaryCard
           title="Saldo"
           size="large"
           amount={balance}
@@ -63,7 +64,7 @@ const SumaryCards = async ({
         />
       </div>
       <div className="col-span-10 row-span-1 sm:col-span-4">
-        <SumaryCard
+        <SummaryCard
           title="Investimentos"
           amount={investmentsTotal}
           highlighted
@@ -76,7 +77,7 @@ const SumaryCards = async ({
       </div>
 
       <div className="col-span-10 row-span-1 sm:col-span-3">
-        <SumaryCard
+        <SummaryCard
           title="Receita"
           amount={depositsTotal}
           icon={
@@ -88,7 +89,7 @@ const SumaryCards = async ({
       </div>
 
       <div className="col-span-10 row-span-1 sm:col-span-3">
-        <SumaryCard
+        <SummaryCard
           title="Despesas"
           amount={expensesTotal}
           icon={
@@ -118,4 +119,4 @@ const SumaryCards = async ({
   )
 }
 
-export default SumaryCards
+export default SummaryCards

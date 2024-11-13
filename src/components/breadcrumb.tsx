@@ -35,7 +35,7 @@ export function Breadcrumb() {
   if (!isMobile && open) return <div />
 
   return (
-    <BreadcrumbUI>
+    <BreadcrumbUI className="pl-2">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>

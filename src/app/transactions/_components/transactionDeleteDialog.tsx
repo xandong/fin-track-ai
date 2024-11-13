@@ -4,16 +4,18 @@ import { deleteTransaction } from "@/actions/deleteTransaction"
 import { Button } from "@/components/_ui/button"
 import { ConfirmationDialog } from "@/components/ConfirmationDialog"
 import { TrashIcon } from "lucide-react"
-import { useCallback } from "react"
+import { ReactNode, useCallback } from "react"
 
 interface TransacTransactionDeleteDialogProps {
   transactionId: string
   transactionName: string
+  TriggerButton?: ReactNode
 }
 
 export const TransactionDeleteDialog = ({
   transactionId,
-  transactionName
+  transactionName,
+  TriggerButton
 }: TransacTransactionDeleteDialogProps) => {
   const handleConfirmTransactionDeletion = useCallback(async () => {
     try {
@@ -29,9 +31,13 @@ export const TransactionDeleteDialog = ({
       description="Tem certeza que deseja excluir? Essa ação é irreversível. Você excluirá para sempre essa transação."
       handleConfirm={handleConfirmTransactionDeletion}
       TriggerButton={
-        <Button variant="ghost" size="icon">
-          <TrashIcon className="text-zinc-500" />
-        </Button>
+        TriggerButton ? (
+          TriggerButton
+        ) : (
+          <Button variant="ghost" size="icon">
+            <TrashIcon className="text-zinc-500" />
+          </Button>
+        )
       }
     />
   )

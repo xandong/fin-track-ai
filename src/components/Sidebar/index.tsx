@@ -15,9 +15,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-  SidebarTrigger
+  SidebarTrigger,
+  useSidebar
 } from "../_ui/sidebar"
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
 import {
   ArrowLeftRightIcon,
   CaptionsIcon,
@@ -55,57 +56,73 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ reportsAccess }: SidebarProps) => {
+  const { setOpen, isMobile, setOpenMobile } = useSidebar()
   const path = usePathname()
 
+  useEffect(() => {
+    if (isMobile || path == "/subscription") setOpen(false)
+    setOpenMobile(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <UISidebar>
-      <SidebarHeader className="relative p-4">
-        <SidebarTrigger className="absolute right-1 top-0">
-          <PanelRightIcon size={24} />
-        </SidebarTrigger>
-        <Link href={"/"}>
-          <Image
-            src="/logo-full.png"
-            alt="Fin Track AI"
-            width={173.57}
-            height={39}
-          />
-        </Link>
-      </SidebarHeader>
-      <SidebarSeparator />
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {SIDEBAR_LIST.map((el) => {
-                if (el.path === "/reports" && !reportsAccess) {
-                  return <div key={el.path} />
-                }
+    <>
+      <UISidebar>
+        <SidebarHeader className="relative p-4">
+          <div className="flex items-center justify-between">
+            <Link href={"/"}>
+              <Image
+                src="/logo-full.png"
+                alt="Fin Track AI"
+                width={173.57}
+                height={39}
+              />
+            </Link>
 
-                return (
-                  <SidebarMenuItem key={el.path}>
-                    <SidebarMenuButton asChild className="pl-4 text-base">
-                      <Link
-                        className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} transition-all duration-300`}
-                        href={el.path}
+            <SidebarTrigger className="m-0 rounded-xl p-5">
+              <PanelRightIcon size={24} />
+            </SidebarTrigger>
+          </div>
+        </SidebarHeader>
+        <SidebarSeparator />
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {SIDEBAR_LIST.map((el) => {
+                  if (el.path === "/reports" && !reportsAccess) {
+                    return <div key={el.path} />
+                  }
+
+                  return (
+                    <SidebarMenuItem key={el.path}>
+                      <SidebarMenuButton
+                        asChild
+                        className="pl-4 text-base"
+                        onClick={() => setOpen(false)}
                       >
-                        {el.icon}
-                        {el.label}
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+                        <Link
+                          className={`${path === el.path ? "font-bold text-secondary/90 hover:text-secondary" : "font-semibold text-zinc-500 hover:text-zinc-400/80"} transition-all duration-300`}
+                          href={el.path}
+                        >
+                          {el.icon}
+                          {el.label}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
 
-      <SidebarSeparator />
+        <SidebarSeparator />
 
-      <SidebarFooter className="items-end p-6 py-4">
-        <UserButton showName />
-      </SidebarFooter>
-    </UISidebar>
+        <SidebarFooter className="items-end p-6 py-4">
+          <UserButton showName />
+        </SidebarFooter>
+      </UISidebar>
+    </>
   )
 }

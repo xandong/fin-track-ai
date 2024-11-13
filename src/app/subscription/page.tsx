@@ -102,12 +102,10 @@ const Subscription = async () => {
     <>
       <Sidebar reportsAccess={subscriptionPlan !== "free"} />
 
-      <WrapperLayout>
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl font-bold leading-8">Assinatura</h1>
-          {subscriptionPlan !== "free" ? <ManageSubscription /> : <div />}
-        </div>
-
+      <WrapperLayout
+        title="Assinatura"
+        actions={subscriptionPlan !== "free" ? <ManageSubscription /> : <div />}
+      >
         <div className="flex flex-1">
           <Tabs
             defaultValue={
@@ -115,7 +113,7 @@ const Subscription = async () => {
             }
             className="flex flex-1 flex-col items-center"
           >
-            <TabsList className="grid w-[400px] grid-cols-2">
+            <TabsList className="grid w-[240px] grid-cols-2 sm:w-[400px]">
               <TabsTrigger value="monthly">Mensal</TabsTrigger>
               <TabsTrigger value="annually">Anual</TabsTrigger>
             </TabsList>

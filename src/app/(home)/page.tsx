@@ -6,7 +6,7 @@ import { isMatch } from "date-fns"
 
 import { Sidebar } from "@/components/Sidebar"
 import TransactionsList from "./_components/transactionsList"
-import SumaryCards from "./_components/sumaryCards"
+import SummaryCards from "./_components/summaryCards"
 import TimeSelect from "./_components/timeSelect"
 import { getDashboardPage } from "@/actions/getDashboardPage"
 import { getUserCanAdd } from "@/actions/getUserCanAdd"
@@ -58,9 +58,9 @@ const Home = async ({ searchParams }: HomeParams) => {
     <>
       <Sidebar reportsAccess={currentSubscription !== "free"} />
 
-      <WrapperLayout>
-        <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row">
-          <h1 className="text-2xl font-bold leading-8">Dashboard</h1>
+      <WrapperLayout
+        title="Dashboard"
+        actions={
           <div className="flex flex-row gap-2">
             <ReportAiDialog
               month={selectedMonth}
@@ -70,11 +70,11 @@ const Home = async ({ searchParams }: HomeParams) => {
 
             <TimeSelect />
           </div>
-        </div>
-
+        }
+      >
         <div className="grid w-full grid-cols-4 space-x-0 space-y-10 xl:grid-cols-6 xl:space-x-10 xl:space-y-0">
           <div className="col-span-4">
-            <SumaryCards
+            <SummaryCards
               categories={categories}
               transactions={transactions}
               canAddTransaction={canAddTransaction}

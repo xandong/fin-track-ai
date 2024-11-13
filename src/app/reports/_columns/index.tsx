@@ -45,8 +45,8 @@ export const getColumns = ({
     {
       accessorKey: "transactionsId",
       header: "Transações",
-      cell: ({ row: { original: transaction } }) => (
-        <div>{transaction.transactionsId.length}</div>
+      cell: ({ row: { original: report } }) => (
+        <div>{report.transactionsId.length}</div>
       ),
       sortingFn: (rowA, rowB) =>
         rowA.original.transactionsId.length -
@@ -65,9 +65,9 @@ export const getColumns = ({
           </Button>
         )
       },
-      cell: ({ row: { original: transaction } }) => (
+      cell: ({ row: { original: report } }) => (
         <span className="text-zinc-500" suppressHydrationWarning>
-          {new Date(transaction.createdAt).toLocaleDateString("pt-BR", {
+          {new Date(report.createdAt).toLocaleDateString("pt-BR", {
             day: "2-digit",
             month: "long",
             year: "numeric"

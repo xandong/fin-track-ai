@@ -5,7 +5,7 @@ import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
 import { formatCurrency } from "@/utils/formatter"
 
-interface SumaryCardProps {
+interface SummaryCardProps {
   canAddTransaction?: boolean
   canAddCategory?: boolean
   icon: ReactNode
@@ -16,7 +16,7 @@ interface SumaryCardProps {
   categories?: TransactionCategory[]
 }
 
-const SumaryCard = ({
+const SummaryCard = ({
   amount,
   icon,
   title,
@@ -25,7 +25,7 @@ const SumaryCard = ({
   categories,
   canAddTransaction,
   canAddCategory
-}: SumaryCardProps) => {
+}: SummaryCardProps) => {
   return (
     <Card className={`h-full ${highlighted ? "bg-zinc-900/70" : ""}`}>
       <CardHeader className="pt-4">
@@ -36,7 +36,7 @@ const SumaryCard = ({
       </CardHeader>
       <CardContent className="flex items-center justify-between pb-4">
         <p
-          className={`font-bold ${size === "large" ? "text-4xl" : "text-2xl"} max-w-full`}
+          className={`font-bold ${size === "large" ? "text-2xl sm:text-4xl" : "text-lg sm:text-2xl"} max-w-full`}
         >
           {formatCurrency(amount)}
         </p>
@@ -55,4 +55,4 @@ const SumaryCard = ({
   )
 }
 
-export default SumaryCard
+export default SummaryCard

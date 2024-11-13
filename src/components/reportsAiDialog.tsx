@@ -18,8 +18,8 @@ import { ScrollArea } from "@/components/_ui/scroll-area"
 import jsPDF from "jspdf"
 import { generateAiReport } from "@/app/(home)/_actons/genereteAiReport"
 import { marked } from "marked"
-import { useIsMobile } from "@/hooks/use-mobile"
 import Link from "next/link"
+import { useSidebar } from "./_ui/sidebar"
 
 interface ReportAiDialogProps {
   year: string
@@ -36,7 +36,7 @@ export const ReportAiDialog = ({
   initialReport = null,
   free
 }: ReportAiDialogProps) => {
-  const isMobile = useIsMobile()
+  const { isMobile } = useSidebar()
   const [report, setReport] = useState<string | null>(initialReport)
   const [isLoading, setIsloading] = useState(false)
   const contentRef = useRef<HTMLDivElement | null>(null)
@@ -122,7 +122,7 @@ export const ReportAiDialog = ({
         </DialogHeader>
 
         <ScrollArea
-          className="prose prose-h3:text-white prose-h4:text-white prose-strong:text-white max-h-[550px] w-full text-white"
+          className="prose max-h-[550px] w-full text-white prose-h3:text-white prose-h4:text-white prose-strong:text-white"
           ref={contentRef}
         >
           <Markdown className={"w-full"}>{report}</Markdown>

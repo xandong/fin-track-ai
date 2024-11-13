@@ -65,6 +65,7 @@ import {
   CommandItem,
   CommandList
 } from "../_ui/command"
+import { TransactionDeleteDialog } from "@/app/transactions/_components/transactionDeleteDialog"
 
 const formSchema = z.object({
   name: z
@@ -103,6 +104,8 @@ interface UpsertTransactionDialogProps {
   UpdateButton?: React.ReactNode
   canAddCategory?: boolean
   canAddTransaction?: boolean
+  responsive?: boolean
+  canDelete?: boolean
 }
 
 export const UpsertTransactionDialog = ({
@@ -112,7 +115,9 @@ export const UpsertTransactionDialog = ({
   UpdateButton,
   transactionId,
   canAddCategory,
-  canAddTransaction
+  canAddTransaction,
+  responsive = true,
+  canDelete
 }: UpsertTransactionDialogProps) => {
   const [openCategorySelect, setOpenCategorySelect] = React.useState(false)
   const [categorySearch, setCategorySearch] = React.useState("")
@@ -227,7 +232,9 @@ export const UpsertTransactionDialog = ({
             UpdateButton
           ) : (
             <Button className="rounded-full">
-              <span className="hidden sm:block">Editar Transação</span>
+              <span className={`${responsive ? "hidden sm:block" : ""}`}>
+                Editar Transação
+              </span>
               <ArrowDownUpIcon />
             </Button>
           )
@@ -235,7 +242,9 @@ export const UpsertTransactionDialog = ({
           CreateButton
         ) : (
           <Button className="rounded-full">
-            <span className="hidden sm:block">Adicionar Transação</span>
+            <span className={`${responsive ? "hidden sm:block" : ""}`}>
+              Adicionar Transação
+            </span>
             <ArrowDownUpIcon />
           </Button>
         )}
@@ -482,11 +491,28 @@ export const UpsertTransactionDialog = ({
             />
 
             <DialogFooter className="flex gap-3 sm:gap-0">
+              {canDelete && (
+                <>
+                  <div className="flex w-full pt-6">
+                    <TransactionDeleteDialog
+                      transactionId={transactionId || ""}
+                      transactionName={defaultValues?.name || ""}
+                      TriggerButton={
+                        <Button variant="destructive" className="w-full">
+                          Deletar
+                        </Button>
+                      }
+                    />
+                  </div>
+                </>
+              )}
+
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancelar
                 </Button>
               </DialogClose>
+
               <Button
                 type="submit"
                 disabled={!defaultValues && !canAddTransaction}

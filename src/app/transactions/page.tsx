@@ -30,6 +30,9 @@ const Transactions = async () => {
       },
       where: {
         userId: userId
+      },
+      orderBy: {
+        date: "desc"
       }
     }),
     await prisma.transactionCategory.findMany({
@@ -56,19 +59,19 @@ const Transactions = async () => {
   return (
     <>
       <Sidebar reportsAccess={subscriptionPlan !== "free"} />
-      <WrapperLayout>
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl font-bold leading-8">Transactions</h1>
-
+      <WrapperLayout
+        title="Transações"
+        actions={
           <div>
             <UpsertTransactionDialog
+              responsive={false}
               categories={categories}
               canAddTransaction={canAddTransaction}
               canAddCategory={canAddCategory}
             />
           </div>
-        </div>
-
+        }
+      >
         <TransactionsTable
           canAddTransaction={canAddTransaction}
           canAddCategory={canAddCategory}

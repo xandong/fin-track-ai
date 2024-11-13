@@ -58,19 +58,16 @@ const Reports = async () => {
   const reports = await prisma.report.findMany({
     where: {
       userId: userId
+    },
+    orderBy: {
+      createdAt: "desc"
     }
   })
 
   return (
     <>
       <Sidebar reportsAccess={true} />
-      <WrapperLayout>
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl font-bold leading-8">Relatórios com IA</h1>
-
-          <div></div>
-        </div>
-
+      <WrapperLayout title="Relatórios com IA" actions={<div></div>}>
         <ReportsTable
           canAddReport={canAddReport}
           reports={JSON.parse(JSON.stringify(reports))}

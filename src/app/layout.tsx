@@ -8,7 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { ScrollArea } from "@/components/_ui/scroll-area"
 import { SubscriptionProvider } from "@/context/SubscriptionContext"
-import { SidebarProvider, SidebarTrigger } from "@/components/_ui/sidebar"
+import { SidebarProvider } from "@/components/_ui/sidebar"
 import { ToastProvider } from "@/components/_ui/toast"
 
 const mulish = Mulish({
@@ -40,8 +40,7 @@ export default function RootLayout({
           <ToastProvider>
             <ScrollArea className="w-hull h-full">
               <SubscriptionProvider>
-                <SidebarProvider>
-                  <SidebarTrigger size={"default"} />
+                <SidebarProvider defaultOpen={false}>
                   {children}
                   <SpeedInsights />
                 </SidebarProvider>

@@ -34,8 +34,7 @@ export const POST = async (request: Request) => {
       // eslint-disable-next-line no-case-declarations
       const { customer, subscription, subscription_details } = event.data.object
       // eslint-disable-next-line no-case-declarations
-      // const clerkUserId = subscription_details?.metadata?.clerk_user_id
-      const clerkUserId = process.env.USER_TEST_ID || "userId"
+      const clerkUserId = subscription_details?.metadata?.clerk_user_id
 
       // eslint-disable-next-line no-case-declarations
       const priceId = subscription_details?.metadata?.price_id

@@ -29,7 +29,8 @@ export function Breadcrumb() {
     if (pathname === "/subscription") {
       setOpen(false)
     }
-  }, [pathname, setOpen])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!isMobile && open) return <div />
 

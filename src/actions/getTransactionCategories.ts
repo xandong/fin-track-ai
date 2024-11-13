@@ -18,6 +18,9 @@ export const getTransactionCategories = async () => {
             userId: userId ?? undefined
           }
         ]
+      },
+      orderBy: {
+        name: "asc"
       }
     })
 

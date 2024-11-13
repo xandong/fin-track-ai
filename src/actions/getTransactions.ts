@@ -15,6 +15,9 @@ export const getTransactions = async () => {
           }
         }
       },
+      orderBy: {
+        date: "desc"
+      },
       where: {
         userId: userId || undefined
       }

@@ -59,10 +59,14 @@ const Home = async ({ searchParams }: HomeParams) => {
       <Sidebar reportsAccess={currentSubscription !== "free"} />
 
       <WrapperLayout>
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-col items-center justify-between gap-2 sm:flex-row">
           <h1 className="text-2xl font-bold leading-8">Dashboard</h1>
           <div className="flex flex-row gap-2">
-            <ReportAiDialog month={selectedMonth} year={selectedYear} free={currentSubscription === "free"} />
+            <ReportAiDialog
+              month={selectedMonth}
+              year={selectedYear}
+              free={currentSubscription === "free"}
+            />
 
             <TimeSelect />
           </div>

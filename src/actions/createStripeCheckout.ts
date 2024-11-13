@@ -30,7 +30,7 @@ export const createSripeCheckout = async (priceId: string) => {
     ],
     subscription_data: {
       metadata: {
-        cleck_user_id: userId,
+        clerk_user_id: userId,
         price_id: priceId
       }
     }

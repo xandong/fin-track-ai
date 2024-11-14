@@ -49,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="icon" href="/logo.png" />
+      <link rel="icon" href="/logo.svg" />
 
       <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
       <link

@@ -11,7 +11,6 @@ import { SubscriptionProvider } from "@/context/SubscriptionContext"
 import { SidebarProvider } from "@/components/_ui/sidebar"
 import { ToastProvider } from "@/components/_ui/toast"
 import { Toaster } from "@/components/_ui/toaster"
-import Head from "next/head"
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -50,25 +49,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head {...metadata}>
-        <link rel="icon" href="/logo.svg" />
+      <link rel="icon" href="/logo.png" />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href="/icon-192x192.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="512x512"
-          href="/icon-512x512.png"
-        />
+      <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="/icon-192x192.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="512x512"
+        href="/icon-512x512.png"
+      />
 
-        <link rel="manifest" href="/manifest.json" />
-      </Head>
+      <link rel="manifest" href="/manifest.json" />
+
       <body className={`${mulish.className} dark antialiased`}>
         <ClerkProvider
           publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || ""}

@@ -1,9 +1,12 @@
+"use client"
+
 import { ReactNode } from "react"
 import { TransactionCategory } from "@prisma/client"
 
 import { UpsertTransactionDialog } from "@/components/UpsertTransactionDialog"
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
 import { formatCurrency } from "@/utils/formatter"
+import { useAnimatedNumber } from "@/hooks/use-animated-number"
 
 interface SummaryCardProps {
   canAddTransaction?: boolean
@@ -26,6 +29,8 @@ const SummaryCard = ({
   canAddTransaction,
   canAddCategory
 }: SummaryCardProps) => {
+  const amountProgressive = useAnimatedNumber({ amount, duration: 100 })
+
   return (
     <Card className={`h-full ${highlighted ? "bg-zinc-900/70" : ""}`}>
       <CardHeader className="pt-4">
@@ -38,7 +43,7 @@ const SummaryCard = ({
         <p
           className={`font-bold ${size === "large" ? "text-2xl sm:text-4xl" : "text-lg sm:text-2xl"} max-w-full`}
         >
-          {formatCurrency(amount)}
+          {formatCurrency(amountProgressive)}
         </p>
 
         <div>

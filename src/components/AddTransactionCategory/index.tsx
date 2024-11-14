@@ -19,11 +19,14 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "../_ui/form"
 import { Input } from "../_ui/input"
 import { addTransactionCategory } from "@/actions/addTransactionCategory"
 import { formatTransactionCategory } from "@/utils/formatter"
+import { useToast } from "@/hooks/use-toast"
+import { DEFAULT_TOAST_MESSAGES } from "@/utils/constants/defaults"
 
 interface AddTransactionCategoryProps {
   categories: TransactionCategory[]
   disabled?: boolean
   defaultValue?: string
+  onClose: () => void
   // eslint-disable-next-line no-unused-vars
   handleNewCategory: (category: TransactionCategory) => void
 }
@@ -32,10 +35,15 @@ export const AddTransactionCategory = ({
   categories,
   defaultValue,
   disabled,
-  handleNewCategory
+  handleNewCategory,
+  onClose
 }: AddTransactionCategoryProps) => {
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [newCategoryName, setNewCategoryName] = useState(defaultValue || "")
+  const [newCategoryName, setNewCategoryName] = useState(
+    defaultValue ? defaultValue : ""
+  )
   const [newCategoryNameError, setNewCategoryNameError] = useState<
     string | null
   >(null)
@@ -52,6 +60,7 @@ export const AddTransactionCategory = ({
       setNewCategoryNameError(null)
 
       try {
+        setIsLoading(true)
         const newCategory = await addTransactionCategory({
           name: name,
           type: CategoryType.PRIVATE
@@ -62,12 +71,21 @@ export const AddTransactionCategory = ({
         setNewCategoryName("")
       } catch (error) {
         console.error("ERROR", { error })
+        toast({
+          variant: "destructive",
+          title: DEFAULT_TOAST_MESSAGES.error.title,
+          description: DEFAULT_TOAST_MESSAGES.error.description
+        })
+      } finally {
+        setIsLoading(false)
       }
     },
-    [categories, handleNewCategory]
+    [categories, handleNewCategory, toast]
   )
 
   useEffect(() => {
+    if (defaultValue === newCategoryName) return
+
     const handler = setTimeout(() => {
       const { categoryMatch } = validateNewCategoryName(
         newCategoryName,
@@ -78,10 +96,16 @@ export const AddTransactionCategory = ({
         return setNewCategoryNameError("A Categoria já existente")
 
       setNewCategoryNameError(null)
-    }, 300)
+    }, 200)
 
     return () => clearInterval(handler)
-  }, [categories, newCategoryName])
+  }, [categories, defaultValue, newCategoryName])
+
+  useEffect(() => {
+    if (!defaultValue) return
+
+    setNewCategoryName(defaultValue)
+  }, [defaultValue])
 
   return (
     <Dialog
@@ -89,13 +113,15 @@ export const AddTransactionCategory = ({
       onOpenChange={(open) => {
         setIsOpen(open)
         if (!open) {
-          setNewCategoryName("")
+          if (!defaultValue) setNewCategoryName("")
           setNewCategoryNameError(null)
+          onClose()
         }
       }}
     >
       <DialogTrigger asChild className="w-full" disabled={disabled}>
         <Button
+          isLoading={isLoading}
           className="w-full rounded-full"
           variant={defaultValue ? "ghost" : "outline"}
         >
@@ -119,7 +145,6 @@ export const AddTransactionCategory = ({
               <Input
                 value={newCategoryName}
                 onChange={(e) => {
-                  e.preventDefault()
                   setNewCategoryName(e.target.value)
                 }}
                 type="text"
@@ -131,14 +156,16 @@ export const AddTransactionCategory = ({
             </FormMessage>
           </FormItem>
 
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="outline">
+          <DialogFooter className="gap-2">
+            <DialogClose asChild disabled={isLoading}>
+              <Button className="w-full" type="button" variant="outline">
                 Cancelar
               </Button>
             </DialogClose>
 
             <Button
+              className="w-full"
+              isLoading={isLoading}
               disabled={!!newCategoryNameError || !newCategoryName}
               type="button"
               onClick={() => onSubmit(newCategoryName)}

@@ -67,6 +67,8 @@ import {
   CommandList
 } from "../_ui/command"
 import { TransactionDeleteDialog } from "@/app/transactions/_components/transactionDeleteDialog"
+import { useToast } from "@/hooks/use-toast"
+import { DEFAULT_TOAST_MESSAGES } from "@/utils/constants/defaults"
 
 const formSchema = z.object({
   name: z
@@ -120,9 +122,11 @@ export const UpsertTransactionDialog = ({
   responsive = true,
   canDelete
 }: UpsertTransactionDialogProps) => {
+  const { toast } = useToast()
   const [openCategorySelect, setOpenCategorySelect] = React.useState(false)
   const [categorySearch, setCategorySearch] = React.useState("")
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const otherCategory = categories.find((category) => category.name == "OTHER")
   const [categoryId, setCategoryId] = useState<string>(
     defaultValues?.categoryId
@@ -138,7 +142,8 @@ export const UpsertTransactionDialog = ({
       ? { ...defaultValues, date: new Date(defaultValues?.date) }
       : {
           name: "",
-          date: new Date()
+          date: new Date(),
+          paymentMethod: "CASH"
         }
   })
 
@@ -157,6 +162,7 @@ export const UpsertTransactionDialog = ({
         return
 
       try {
+        setIsLoading(true)
         await upsertTransaction({
           ...data,
           id: transactionId,
@@ -172,15 +178,32 @@ export const UpsertTransactionDialog = ({
             ? { ...defaultValues, date: new Date(defaultValues?.date) }
             : {
                 name: "",
-                date: new Date()
+                date: new Date(),
+                paymentMethod: "CASH"
               }
         )
+
+        toast({
+          title: `Transação ${defaultValues ? "atualizada" : "criada"} com sucesso!`
+        })
       } catch (error) {
+        toast({
+          variant: "destructive",
+          title: DEFAULT_TOAST_MESSAGES.error.title,
+          description: DEFAULT_TOAST_MESSAGES.error.description
+        })
         console.error("ERROR", { error })
+      } finally {
+        setIsLoading(false)
       }
     },
-    [categoryId, defaultValues, form, transactionId]
+    [categoryId, defaultValues, form, toast, transactionId]
   )
+
+  const handleOnCloseAddNewCategory = useCallback(() => {
+    setCategorySearch("")
+    setOpenCategorySelect(false)
+  }, [])
 
   const handleAddNewCategory = useCallback(
     (newCategory: {
@@ -196,8 +219,9 @@ export const UpsertTransactionDialog = ({
 
       categories.push(newCategory)
       setNewCategoryId(newCategory.id.toString())
+      handleOnCloseAddNewCategory()
     },
-    [categories, categoryId]
+    [categories, categoryId, handleOnCloseAddNewCategory]
   )
 
   useEffect(() => {
@@ -214,13 +238,15 @@ export const UpsertTransactionDialog = ({
         setIsOpen(open)
         if (!open) {
           setCategoryId("")
+          setCategorySearch("")
 
           form.reset(
             defaultValues
               ? { ...defaultValues, date: new Date(defaultValues?.date) }
               : {
                   name: "",
-                  date: new Date()
+                  date: new Date(),
+                  paymentMethod: "CASH"
                 }
           )
           setCategoryId(otherCategory ? otherCategory.id.toString() : "")
@@ -369,6 +395,7 @@ export const UpsertTransactionDialog = ({
                         defaultValue={categorySearch}
                         categories={categories}
                         disabled={!canAddCategory}
+                        onClose={handleOnCloseAddNewCategory}
                         handleNewCategory={handleAddNewCategory}
                       />
                     </CommandEmpty>
@@ -416,6 +443,7 @@ export const UpsertTransactionDialog = ({
             </Popover>
 
             <AddTransactionCategory
+              onClose={handleOnCloseAddNewCategory}
               categories={categories}
               disabled={!canAddCategory}
               handleNewCategory={handleAddNewCategory}
@@ -499,7 +527,11 @@ export const UpsertTransactionDialog = ({
                       transactionId={transactionId || ""}
                       transactionName={defaultValues?.name || ""}
                       TriggerButton={
-                        <Button variant="destructive" className="w-full">
+                        <Button
+                          variant="destructive"
+                          className="w-full"
+                          disabled={isLoading}
+                        >
                           Deletar
                         </Button>
                       }
@@ -508,14 +540,14 @@ export const UpsertTransactionDialog = ({
                 </>
               )}
 
-              <DialogClose asChild>
+              <DialogClose asChild disabled={isLoading}>
                 <Button type="button" variant="outline">
                   Cancelar
                 </Button>
               </DialogClose>
 
               <Button
-                isLoading
+                isLoading={isLoading}
                 type="submit"
                 disabled={!defaultValues && !canAddTransaction}
               >

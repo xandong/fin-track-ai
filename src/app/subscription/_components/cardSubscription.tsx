@@ -14,6 +14,8 @@ import { CheckIcon, XIcon } from "lucide-react"
 import { createStripeCheckout } from "@/actions/createStripeCheckout"
 import { loadStripe } from "@stripe/stripe-js"
 import { useSidebar } from "@/components/_ui/sidebar"
+import { useToast } from "@/hooks/use-toast"
+import { DEFAULT_TOAST_MESSAGES } from "@/utils/constants/defaults"
 
 interface CardSubscriptionProps {
   priceId?: string
@@ -22,6 +24,9 @@ interface CardSubscriptionProps {
   list: { has: boolean; label: string }[]
   diffYear?: number
   current?: boolean
+  isLoading: boolean
+  // eslint-disable-next-line no-unused-vars
+  setIsLoading: (bool: boolean) => void
 }
 
 const CardSubscription = ({
@@ -30,9 +35,12 @@ const CardSubscription = ({
   price,
   list,
   diffYear,
-  current
+  current,
+  isLoading,
+  setIsLoading
 }: CardSubscriptionProps) => {
   const { isMobile } = useSidebar()
+  const { toast } = useToast()
 
   const formattedPrice = useMemo(() => {
     if (price === 0) return "0"
@@ -40,23 +48,35 @@ const CardSubscription = ({
   }, [price])
 
   const handleAcquirePlanClick = async () => {
-    if (!priceId) return
+    try {
+      setIsLoading(true)
+      if (!priceId) return
 
-    const { sessionId } = await createStripeCheckout(priceId)
+      const { sessionId } = await createStripeCheckout(priceId)
 
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-      throw new Error("Stripe publishable key not found")
+      if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+        throw new Error("Stripe publishable key not found")
+      }
+
+      const stripe = await loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+      )
+
+      if (!stripe) {
+        throw new Error("Stripe not found")
+      }
+
+      await stripe.redirectToCheckout({ sessionId })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: DEFAULT_TOAST_MESSAGES.error.title,
+        description: DEFAULT_TOAST_MESSAGES.error.description
+      })
+      console.error({ error })
+    } finally {
+      setIsLoading(false)
     }
-
-    const stripe = await loadStripe(
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-    )
-
-    if (!stripe) {
-      throw new Error("Stripe not found")
-    }
-
-    await stripe.redirectToCheckout({ sessionId })
   }
 
   return (
@@ -126,7 +146,11 @@ const CardSubscription = ({
             Plano atual
           </Button>
         ) : (
-          <Button className="w-full" onClick={handleAcquirePlanClick}>
+          <Button
+            isLoading={isLoading}
+            className="w-full"
+            onClick={handleAcquirePlanClick}
+          >
             Alterar plano
           </Button>
         )}

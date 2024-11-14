@@ -10,7 +10,6 @@ import SummaryCards from "./_components/summaryCards"
 import TimeSelect from "./_components/timeSelect"
 import { getDashboardPage } from "@/actions/getDashboardPage"
 import { getUserCanAdd } from "@/actions/getUserCanAdd"
-import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
 import { ReportAiDialog } from "@/components/reportsAiDialog"
 import { WrapperLayout } from "@/components/WrapperLayout"
 
@@ -43,19 +42,18 @@ const Home = async ({ searchParams }: HomeParams) => {
   const [
     { categories, transactions },
     {
+      currentSubscriptionPlan,
       transactions: { canAdd: canAddTransaction },
       categories: { canAdd: canAddCategory }
-    },
-    currentSubscription
+    }
   ] = await Promise.all([
     await getDashboardPage(selectedYear, selectedMonth),
-    await getUserCanAdd(),
-    await getCurrentSubscription()
+    await getUserCanAdd()
   ])
 
   return (
     <>
-      <Sidebar reportsAccess={currentSubscription !== "free"} />
+      <Sidebar reportsAccess={currentSubscriptionPlan !== "free"} />
 
       <WrapperLayout
         title="Dashboard"
@@ -64,7 +62,7 @@ const Home = async ({ searchParams }: HomeParams) => {
             <ReportAiDialog
               month={selectedMonth}
               year={selectedYear}
-              free={currentSubscription === "free"}
+              free={currentSubscriptionPlan === "free"}
             />
 
             <TimeSelect />

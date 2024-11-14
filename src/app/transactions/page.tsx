@@ -9,7 +9,6 @@ import { TransactionsTable } from "./_components/transactionsTable"
 import { Sidebar } from "@/components/Sidebar"
 import { redirect } from "next/navigation"
 import { getUserCanAdd } from "@/actions/getUserCanAdd"
-import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
 import { WrapperLayout } from "@/components/WrapperLayout"
 
 const Transactions = async () => {
@@ -19,7 +18,15 @@ const Transactions = async () => {
     redirect("/login")
   }
 
-  const [transactions, categories, subscriptionPlan] = await Promise.all([
+  const [
+    transactions,
+    categories,
+    {
+      currentSubscriptionPlan,
+      categories: { canAdd: canAddCategory },
+      transactions: { canAdd: canAddTransaction }
+    }
+  ] = await Promise.all([
     await prisma.transaction.findMany({
       include: {
         category: {
@@ -48,17 +55,12 @@ const Transactions = async () => {
         ]
       }
     }),
-    await getCurrentSubscription()
+    await getUserCanAdd()
   ])
-
-  const {
-    categories: { canAdd: canAddCategory },
-    transactions: { canAdd: canAddTransaction }
-  } = await getUserCanAdd()
 
   return (
     <>
-      <Sidebar reportsAccess={subscriptionPlan !== "free"} />
+      <Sidebar reportsAccess={currentSubscriptionPlan !== "free"} />
       <WrapperLayout
         title="Transações"
         actions={

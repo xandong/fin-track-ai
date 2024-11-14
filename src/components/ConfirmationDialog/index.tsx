@@ -17,7 +17,8 @@ interface ConfirmationDialogProps {
   title?: string
   description?: string
   confirmText?: string
-  handleConfirm: () => void
+  handleConfirm: () => Promise<void>
+  isLoading?: boolean
 }
 
 export const ConfirmationDialog = ({
@@ -26,7 +27,8 @@ export const ConfirmationDialog = ({
   title,
   description,
   confirmText,
-  handleConfirm
+  handleConfirm,
+  isLoading = false
 }: ConfirmationDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -52,16 +54,17 @@ export const ConfirmationDialog = ({
         </DialogHeader>
 
         <DialogFooter className="gap-2">
-          <DialogClose asChild>
+          <DialogClose asChild disabled={isLoading}>
             <Button className="flex-1" type="button" variant="outline">
               Cancelar
             </Button>
           </DialogClose>
           <Button
+            isLoading={isLoading}
             className="flex-1"
             type="button"
-            onClick={() => {
-              handleConfirm()
+            onClick={async () => {
+              await handleConfirm()
               setIsOpen(false)
             }}
           >

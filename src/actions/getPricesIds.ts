@@ -2,7 +2,7 @@
 
 import { initStripe } from "./initStripe"
 
-interface ProductType {
+export interface ProductType {
   monthly:
     | {
         priceId: string

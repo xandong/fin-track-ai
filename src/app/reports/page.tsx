@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma"
 import { Sidebar } from "@/components/Sidebar"
 import { redirect } from "next/navigation"
 import { getUserCanAdd } from "@/actions/getUserCanAdd"
-import { getCurrentSubscription } from "@/actions/getCurrentSubscription"
 import { ReportsTable } from "./_components/reportsTable"
 import { WrapperLayout } from "@/components/WrapperLayout"
 
@@ -19,12 +18,11 @@ const Reports = async () => {
   }
 
   const {
-    reports: { canAdd: canAddReport }
+    reports: { canAdd: canAddReport },
+    currentSubscriptionPlan
   } = await getUserCanAdd()
 
-  const currentSubscription = await getCurrentSubscription()
-
-  if (currentSubscription === "free") {
+  if (currentSubscriptionPlan === "free") {
     redirect("/")
   }
 

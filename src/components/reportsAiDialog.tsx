@@ -13,13 +13,15 @@ import {
 } from "@/components/_ui/dialog"
 import Markdown from "react-markdown"
 import { Button } from "@/components/_ui/button"
-import { BotIcon, LoaderCircleIcon } from "lucide-react"
+import { BotIcon } from "lucide-react"
 import { ScrollArea } from "@/components/_ui/scroll-area"
 import jsPDF from "jspdf"
 import { generateAiReport } from "@/app/(home)/_actions/generateAiReport"
 import { marked } from "marked"
 import Link from "next/link"
 import { useSidebar } from "./_ui/sidebar"
+import { useToast } from "@/hooks/use-toast"
+import { DEFAULT_TOAST_MESSAGES } from "@/utils/constants/defaults"
 
 interface ReportAiDialogProps {
   year: string
@@ -37,18 +39,24 @@ export const ReportAiDialog = ({
   free
 }: ReportAiDialogProps) => {
   const { isMobile } = useSidebar()
+  const { toast } = useToast()
   const [report, setReport] = useState<string | null>(initialReport)
-  const [isLoading, setIsloading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const contentRef = useRef<HTMLDivElement | null>(null)
   const handleGenerateReport = async () => {
     try {
-      setIsloading(true)
+      setIsLoading(true)
       const response = await generateAiReport({ month, year })
       setReport(response)
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: DEFAULT_TOAST_MESSAGES.error.title,
+        description: DEFAULT_TOAST_MESSAGES.error.description
+      })
       console.error({ error })
     } finally {
-      setIsloading(false)
+      setIsLoading(false)
     }
   }
 
@@ -128,7 +136,7 @@ export const ReportAiDialog = ({
           <Markdown className={"w-full"}>{report}</Markdown>
         </ScrollArea>
         <DialogFooter>
-          <DialogClose asChild>
+          <DialogClose asChild disabled={isLoading}>
             <Button variant={"outline"}>Cancelar</Button>
           </DialogClose>
 
@@ -148,13 +156,7 @@ export const ReportAiDialog = ({
                   : () => handleGenerateReport()
               }
             >
-              {isLoading ? (
-                <LoaderCircleIcon className="animate-spin" />
-              ) : initialReport ? (
-                "Baixar PDF"
-              ) : (
-                "Gerar Relatório"
-              )}
+              {initialReport ? "Baixar PDF" : "Gerar Relatório"}
             </Button>
           )}
         </DialogFooter>

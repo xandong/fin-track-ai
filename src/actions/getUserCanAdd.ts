@@ -1,9 +1,13 @@
 import { auth } from "@clerk/nextjs/server"
-import { getCurrentSubscription } from "./getCurrentSubscription"
+import {
+  CurrentSubscriptionType,
+  getCurrentSubscription
+} from "./getCurrentSubscription"
 import { getUserCountsPerMonth } from "./getUserCountsPerMonth"
 import { DEFAULT_LIMITS } from "@/utils/constants/defaults"
 
 interface GetUserCanAddResponse {
+  currentSubscriptionPlan: CurrentSubscriptionType
   transactions: {
     limit: number
     current: number
@@ -25,16 +29,14 @@ export const getUserCanAdd = async (): Promise<GetUserCanAddResponse> => {
   const { userId } = await auth()
   if (!userId) throw new Error("Unauthenticated")
 
-  const plan = await getCurrentSubscription()
+  const [plan, { categoriesCount, transactionsCount, reportsCount }] =
+    await Promise.all([await getCurrentSubscription(), getUserCountsPerMonth()])
 
   let [transactionsLimit, categoriesLimit, reportsLimit] = [
     DEFAULT_LIMITS.free.transactions,
     DEFAULT_LIMITS.free.categories,
     DEFAULT_LIMITS.free.reports
   ]
-
-  const { categoriesCount, transactionsCount, reportsCount } =
-    await getUserCountsPerMonth()
 
   if (plan === "advanced-monthly" || plan === "advanced-yearly") {
     categoriesLimit = DEFAULT_LIMITS.advanced.categories
@@ -49,6 +51,7 @@ export const getUserCanAdd = async (): Promise<GetUserCanAddResponse> => {
   }
 
   return {
+    currentSubscriptionPlan: plan,
     transactions: {
       limit: transactionsLimit,
       current: transactionsCount,

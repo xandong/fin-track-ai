@@ -14,9 +14,15 @@ import Link from "next/link"
 import { useMemo } from "react"
 import Image from "next/image"
 import { formatCurrency } from "@/utils/formatter"
+import { TransactionCategoryDisplay } from "@/components/TransactionCategoryDisplay"
+import { Badge } from "@/components/_ui/badge"
 
 interface TransactionsListProps {
-  transactions: Transaction[]
+  transactions: (Transaction & {
+    category: {
+      name: string
+    } | null
+  })[]
 }
 
 const TransactionsList = async ({ transactions }: TransactionsListProps) => {
@@ -43,30 +49,34 @@ const TransactionsList = async ({ transactions }: TransactionsListProps) => {
 export default TransactionsList
 
 interface TransactionCardProps {
-  transaction: Transaction
+  transaction: Transaction & {
+    category: {
+      name: string
+    } | null
+  }
 }
 
 const TransactionCard = ({ transaction }: TransactionCardProps) => {
   const IconComponent = useMemo(() => {
     switch (transaction.paymentMethod) {
-      case "CREDIT_CARD":
-      case "DEBIT_CARD":
-        return <CreditCardIcon size={20} className="text-white" />
-
-      case "BANK_SLIP":
-        return <BarcodeIcon size={20} className="text-white" />
-
-      case "BANK_TRANSFER":
-        return <ArrowRightLeftIcon size={20} className="text-white" />
-
-      case "CASH":
-        return <DollarSignIcon size={20} className="text-white" />
-
       case "PIX":
         return <Image src={"/pix.svg"} width={20} height={20} alt="Pix icon" />
 
+      case "CREDIT_CARD":
+      case "DEBIT_CARD":
+        return <CreditCardIcon size={18} className="text-white" />
+
+      case "BANK_SLIP":
+        return <BarcodeIcon size={18} className="text-white" />
+
+      case "BANK_TRANSFER":
+        return <ArrowRightLeftIcon size={18} className="text-white" />
+
+      case "CASH":
+        return <DollarSignIcon size={18} className="text-white" />
+
       default:
-        return <BadgeDollarSignIcon size={20} className="text-white" />
+        return <BadgeDollarSignIcon size={18} className="text-white" />
     }
   }, [transaction.paymentMethod])
 
@@ -75,34 +85,49 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
   }, [transaction.amount])
 
   return (
-    <div className="flex flex-1 items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl bg-white/5 p-[.625rem]">{IconComponent}</div>
+    <div className="flex w-full items-center gap-3">
+      <div className="rounded-xl bg-white/5 p-[.625rem]">{IconComponent}</div>
 
-        <div className="flex flex-col">
+      <div className="flex w-full flex-col">
+        <div className="flex flex-wrap gap-2">
           <span className="text-sm font-bold">{transaction.name}</span>
+          {transaction.category && (
+            <Badge variant="outline">
+              <span className="text-xs font-semibold text-zinc-500">
+                {TransactionCategoryDisplay({
+                  category: {
+                    name: transaction.category.name
+                  }
+                })}
+              </span>
+            </Badge>
+          )}
+        </div>
+
+        <div className="flex w-full items-end justify-between">
           <span className="text-sm text-zinc-500">
             {new Date(transaction.date).toLocaleDateString("pt-BR", {
               day: "2-digit",
-              month: "long",
+              month: "short",
               year: "numeric"
             })}
           </span>
+
+          <span
+            className={`text-sm font-bold ${
+              transaction.type === "DEPOSIT"
+                ? "text-tertiary"
+                : transaction.type === "EXPENSE"
+                  ? "text-danger"
+                  : transaction.type === "INVESTMENT"
+                    ? "text-secondary"
+                    : "text-white"
+            }`}
+          >
+            {amount}
+          </span>
         </div>
       </div>
-      <span
-        className={`text-sm font-bold ${
-          transaction.type === "DEPOSIT"
-            ? "text-tertiary"
-            : transaction.type === "EXPENSE"
-              ? "text-danger"
-              : transaction.type === "INVESTMENT"
-                ? "text-secondary"
-                : "text-white"
-        }`}
-      >
-        {amount}
-      </span>
     </div>
   )
 }

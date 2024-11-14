@@ -3,7 +3,25 @@ import { getCurrentSubscription } from "./getCurrentSubscription"
 import { getUserCountsPerMonth } from "./getUserCountsPerMonth"
 import { DEFAULT_LIMITS } from "@/utils/constants/defaults"
 
-export const getUserCanAdd = async () => {
+interface GetUserCanAddResponse {
+  transactions: {
+    limit: number
+    current: number
+    canAdd: boolean
+  }
+  categories: {
+    limit: number
+    current: number
+    canAdd: boolean
+  }
+  reports: {
+    limit: number
+    current: number
+    canAdd: boolean
+  }
+}
+
+export const getUserCanAdd = async (): Promise<GetUserCanAddResponse> => {
   const { userId } = await auth()
   if (!userId) throw new Error("Unauthenticated")
 

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@clerk/nextjs/server"
-import { CategoryType } from "@prisma/client"
+import { CategoryType, Transaction, TransactionCategory } from "@prisma/client"
 
 export const getDashboardPage = async (year: string, month: string) => {
   const { userId } = await auth()
@@ -39,7 +39,7 @@ export const getDashboardPage = async (year: string, month: string) => {
   ])
 
   return {
-    transactions: JSON.parse(JSON.stringify(transactions)),
-    categories: JSON.parse(JSON.stringify(categories))
+    transactions: JSON.parse(JSON.stringify(transactions)) as Transaction[],
+    categories: JSON.parse(JSON.stringify(categories)) as TransactionCategory[]
   }
 }

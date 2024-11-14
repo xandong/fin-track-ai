@@ -3,7 +3,7 @@
 import { auth } from "@clerk/nextjs/server"
 import { initStripe } from "./initStripe"
 
-export const createSripeCheckout = async (priceId: string) => {
+export const createStripeCheckout = async (priceId: string) => {
   const { userId } = await auth()
   if (!userId) {
     throw new Error("Unauthenticated")

@@ -13,10 +13,10 @@ import {
 } from "@/components/_ui/dialog"
 import Markdown from "react-markdown"
 import { Button } from "@/components/_ui/button"
-import { BotIcon, Loader2Icon } from "lucide-react"
+import { BotIcon, LoaderCircleIcon } from "lucide-react"
 import { ScrollArea } from "@/components/_ui/scroll-area"
 import jsPDF from "jspdf"
-import { generateAiReport } from "@/app/(home)/_actons/genereteAiReport"
+import { generateAiReport } from "@/app/(home)/_actions/generateAiReport"
 import { marked } from "marked"
 import Link from "next/link"
 import { useSidebar } from "./_ui/sidebar"
@@ -149,7 +149,7 @@ export const ReportAiDialog = ({
               }
             >
               {isLoading ? (
-                <Loader2Icon className="animate-spin" />
+                <LoaderCircleIcon className="animate-spin" />
               ) : initialReport ? (
                 "Baixar PDF"
               ) : (

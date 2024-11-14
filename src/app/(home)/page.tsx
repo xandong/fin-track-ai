@@ -49,7 +49,6 @@ const Home = async ({ searchParams }: HomeParams) => {
     currentSubscription
   ] = await Promise.all([
     await getDashboardPage(selectedYear, selectedMonth),
-
     await getUserCanAdd(),
     await getCurrentSubscription()
   ])

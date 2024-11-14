@@ -5,7 +5,8 @@ import {
   ArrowDownUpIcon,
   CalendarIcon,
   CheckIcon,
-  ChevronsUpDown
+  ChevronsUpDown,
+  PencilIcon
 } from "lucide-react"
 import {
   $Enums,
@@ -231,17 +232,17 @@ export const UpsertTransactionDialog = ({
           UpdateButton ? (
             UpdateButton
           ) : (
-            <Button className="rounded-full">
+            <Button className="w-fit rounded-full sm:w-48">
               <span className={`${responsive ? "hidden sm:block" : ""}`}>
                 Editar Transação
               </span>
-              <ArrowDownUpIcon />
+              <PencilIcon />
             </Button>
           )
         ) : CreateButton ? (
           CreateButton
         ) : (
-          <Button className="rounded-full">
+          <Button className="w-fit rounded-full sm:w-48">
             <span className={`${responsive ? "hidden sm:block" : ""}`}>
               Adicionar Transação
             </span>
@@ -514,6 +515,7 @@ export const UpsertTransactionDialog = ({
               </DialogClose>
 
               <Button
+                isLoading
                 type="submit"
                 disabled={!defaultValues && !canAddTransaction}
               >

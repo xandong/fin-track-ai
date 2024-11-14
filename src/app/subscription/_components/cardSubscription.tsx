@@ -11,7 +11,7 @@ import {
 } from "@/components/_ui/card"
 import { Separator } from "@/components/_ui/separator"
 import { CheckIcon, XIcon } from "lucide-react"
-import { createSripeCheckout } from "@/actions/createStripeCheckout"
+import { createStripeCheckout } from "@/actions/createStripeCheckout"
 import { loadStripe } from "@stripe/stripe-js"
 import { useSidebar } from "@/components/_ui/sidebar"
 
@@ -42,7 +42,7 @@ const CardSubscription = ({
   const handleAcquirePlanClick = async () => {
     if (!priceId) return
 
-    const { sessionId } = await createSripeCheckout(priceId)
+    const { sessionId } = await createStripeCheckout(priceId)
 
     if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
       throw new Error("Stripe publishable key not found")

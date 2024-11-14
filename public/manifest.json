@@ -1,10 +1,10 @@
 {
-  "name": "Fintrack Ai",
-  "short_name": "Fintrack",
+  "name": "Fintrack AI",
+  "short_name": "Fintrack AI",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#5B21B6",
+  "background_color": "#0C0A09",
+  "theme_color": "#0C0A09",
   "description": "Seu App de Gestão Financeira",
   "icons": [
     {

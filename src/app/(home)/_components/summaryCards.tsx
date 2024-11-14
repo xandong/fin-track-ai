@@ -12,7 +12,11 @@ import { ExpensesPerCategory } from "./expensesPerCategory"
 import { TransactionsPieChart } from "./transactionsPieChart"
 
 interface SummaryCardsProps {
-  transactions: Transaction[]
+  transactions: (Transaction & {
+    category: {
+      name: string
+    } | null
+  })[]
   categories: TransactionCategory[]
   canAddTransaction?: boolean
   canAddCategory?: boolean

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@clerk/nextjs/server"
-import { CategoryType, Transaction, TransactionCategory } from "@prisma/client"
+import { CategoryType } from "@prisma/client"
 
 export const getDashboardPage = async (year: string, month: string) => {
   const { userId } = await auth()
@@ -17,6 +17,9 @@ export const getDashboardPage = async (year: string, month: string) => {
       where: {
         ...where,
         userId: userId || ""
+      },
+      include: {
+        category: { select: { name: true } }
       },
       orderBy: {
         date: "desc"
@@ -39,7 +42,9 @@ export const getDashboardPage = async (year: string, month: string) => {
   ])
 
   return {
-    transactions: JSON.parse(JSON.stringify(transactions)) as Transaction[],
-    categories: JSON.parse(JSON.stringify(categories)) as TransactionCategory[]
+    transactions: JSON.parse(
+      JSON.stringify(transactions)
+    ) as typeof transactions,
+    categories: JSON.parse(JSON.stringify(categories)) as typeof categories
   }
 }

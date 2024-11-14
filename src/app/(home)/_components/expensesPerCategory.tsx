@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Transaction, TransactionCategory } from "@prisma/client"
 
 import { Card, CardContent, CardHeader } from "@/components/_ui/card"
@@ -19,6 +19,30 @@ export const ExpensesPerCategory = ({
   transactions,
   expensesTotal
 }: ExpensesPerCategoryProps) => {
+  const expensesPerCategory = useMemo(() => {
+    return categories
+      .map((category) => {
+        const totalPerCategory = transactions
+          .filter(
+            (transaction) =>
+              transaction.type === "EXPENSE" &&
+              transaction.categoryId === category.id
+          )
+          .reduce(
+            (sum, transaction) => Number(sum) + Number(transaction.amount),
+            0
+          )
+
+        if (totalPerCategory === 0) return
+
+        return {
+          category,
+          total: totalPerCategory
+        }
+      })
+      .filter((item) => !!item)
+  }, [categories, transactions])
+
   return (
     <Card className="flex flex-col items-center gap-6">
       <CardHeader className="flex w-full flex-row items-center justify-between pb-0">
@@ -30,19 +54,13 @@ export const ExpensesPerCategory = ({
 
       <ScrollArea className="w-full flex-1">
         <CardContent className="flex h-full max-h-[350px] w-full flex-col gap-2 pb-4 pt-0">
-          {transactions.map((transaction) => {
-            if (transaction.type !== "EXPENSE")
-              return <div key={transaction.id} />
-
-            const category = categories.find(
-              (category) => category.id === transaction.categoryId
-            )
+          {expensesPerCategory.map(({ category, total }) => {
             return (
               <ExpensesRow
-                key={transaction.id}
+                key={category.id}
                 category={category}
-                percent={(Number(transaction.amount) * 100) / expensesTotal}
-                transaction={transaction}
+                percent={(total * 100) / expensesTotal}
+                total={total}
               />
             )
           })}
@@ -54,11 +72,11 @@ export const ExpensesPerCategory = ({
 
 interface ExpensesRowProps {
   category: TransactionCategory | undefined
-  transaction: Transaction
+  total: number
   percent: number
 }
 
-const ExpensesRow = ({ category, percent, transaction }: ExpensesRowProps) => {
+const ExpensesRow = ({ category, percent, total }: ExpensesRowProps) => {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
@@ -82,7 +100,7 @@ const ExpensesRow = ({ category, percent, transaction }: ExpensesRowProps) => {
       />
 
       <div className="text-sm font-semibold text-zinc-500">
-        {formatCurrency(transaction.amount)}
+        {formatCurrency(total)}
       </div>
     </div>
   )

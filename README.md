@@ -16,7 +16,7 @@ Fintrack is a personal finance management application built with [Next.js](https
 
 ## Features
 
-This template includes the following features:
+This project includes the following features:
 
 Fintrack includes the following features to ensure code quality, streamline development, and enhance user experience:
 
@@ -99,7 +99,6 @@ or
 npx plop
 ```
 
-Follow the prompts to quickly create files with predefined templates.
 
 ## CI/CD Workflows
 

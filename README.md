@@ -1,18 +1,38 @@
-# Next.js Project Template
+# Fintrack AI Project
 
-This is a customizable [Next.js](https://nextjs.org) project template, bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) and enhanced with additional tools for streamlined development, testing, and deployment.
+Fintrack is a personal finance management application built with [Next.js](https://nextjs.org), designed to help users track their spending, manage budgets, and gain insights into financial habits. Acting as a comprehensive financial companion, Fintrack offers seamless budget tracking, expense categorization, and insightful financial reports. Leveraging modern web development practices, this project ensures a smooth, efficient user experience and enables reliable performance and rapid feature development, making financial management easier and more accessible.
+
+## Technologies used:
+
+- **React** to build an interactive and responsive interface
+- **Next.js** for SSR, dynamic routing, and backend actions
+- **TypeScript** to provide strong typing and code safety
+- **TailwindCSS** for styling
+- **Prisma** as an ORM to simplify database management
+- **Clerk** for streamlined and secure authentication
+- **OpenAI** to generate reports using **ChatGPT**
+- **Stripe** to handle payment integrations and subscription plans
+- **Docker** integration for development and PostgreSQL as a local database
 
 ## Features
 
 This template includes the following features:
 
-- **[Husky](https://typicode.github.io/husky/)**: Enables pre-commit and pre-push Git hooks for consistent code quality.
-- **Linting**: Ensures consistent coding style across the project with ESLint.
-- **Testing**:
-  - **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** and **[Jest](https://jestjs.io/)**: Setup for unit and integration testing.
-- **[Storybook](https://storybook.js.org/)**: A UI component explorer for creating and documenting isolated components.
-- **CI Workflows with GitHub Actions**: Automated testing and linting workflows configured to run on each push and pull request.
-- **[Plop](https://plopjs.com/)**: Tool for quickly generating component boilerplate with customizable templates.
+Fintrack includes the following features to ensure code quality, streamline development, and enhance user experience:
+
+- **Expense Tracking**: Easily categorize and track all your expenses.
+- **Budget Management**: Set budgets for specific categories and monitor spending.
+- **Analytics Dashboard**: Visualize your financial data with charts and summaries.
+- **Code Quality Tools**:
+  - **[Husky](https://typicode.github.io/husky/)**: Git hooks for pre-commit and pre-push to maintain code quality.
+  - **Linting**: Consistent coding style with ESLint.
+  - **Testing**:
+    - **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** and **[Jest](https://jestjs.io/)** for unit and integration testing.
+- **UI Component Library**:
+  - **[Storybook](https://storybook.js.org/)**: A tool for developing and testing components in isolation.
+- **Automated CI Workflows with GitHub Actions**: Continuous integration with automated tests and linting on every push and pull request.
+- **[Plop](https://plopjs.com/)**: Generate boilerplate code for new components quickly.
+
 
 ## Getting Started
 
@@ -85,17 +105,6 @@ Follow the prompts to quickly create files with predefined templates.
 
 This project includes GitHub Actions workflows for continuous integration, running tests and linting on each push and pull request. Check .github/workflows for configuration details.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out the [Demo](https://fintrack.ventus.company) for more details.

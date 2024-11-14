@@ -28,16 +28,17 @@ export const metadata: Metadata = {
     title: "Fintrack AI - Financial Management Made Simple",
     description:
       "Track and manage your finances with AI-driven insights on Fintrack AI.",
-    images: [`${host}/logo.png`],
+    images: [`${host}/login-bg.png`],
     url: host,
     type: "website"
   },
   twitter: {
+    siteId: "fintrack.ventus.company",
     card: "summary_large_image",
     title: "Fintrack AI - Financial Management Made Simple",
     description:
       "Track and manage your finances with AI-driven insights on Fintrack AI.",
-    images: [`${host}/logo.png`]
+    images: [`${host}/login-bg.png`]
   }
 }
 
